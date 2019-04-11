@@ -1,7 +1,7 @@
 # Личный проект «YetiCave»
 
 * Студент: [Andrii Smerechynskyi](https://up.htmlacademy.ru/php/9/user/803999).
-* Наставник: `Неизвестно`.
+* Наставник: [Олег Скляров](https://htmlacademy.ru/profile/id926687).
 
 ---
 
