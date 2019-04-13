@@ -28,7 +28,7 @@ $user_name = 'Andrii Smerechynskyi'; // укажите здесь ваше им�
 
         <nav class="user-menu">
 
-		<?php if ($is_auth == 1) : ?> 
+		<?php if ($is_auth === 1) : ?> 
 			
 			<div class="user-menu__logged">
 				<p><?php echo $user_name; ?></p>
