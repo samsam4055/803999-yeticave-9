@@ -1,11 +1,11 @@
 <?php
 $is_auth = rand(0, 1);
 
-$user_name = 'Andrii Smerechynskyi'; // укажите здесь ваше имя
+$user_name = 'Andrii Smerechynskyi';
 
 	$categories = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
 
-	$ads = [
+	$lots = [
 			  [ 	
 				"name" => "2014 Rossignol District Snowboard",
 				"category" => "Доски и лыжи",
@@ -77,7 +77,6 @@ $user_name = 'Andrii Smerechynskyi'; // укажите здесь ваше им�
 				<a class="user-menu__logout" href="#">Выход</a>
 			</div>
 		<?php else : ?> 
-		
 			<ul class="user-menu__list">
 				<li class="user-menu__item">
 				  <a href="#">Регистрация</a>
@@ -89,7 +88,6 @@ $user_name = 'Andrii Smerechynskyi'; // укажите здесь ваше им�
 		<?php endif; ?>
 
         <!-- здесь должен быть PHP код для показа меню и данных пользователя -->
-
         </nav>
     </div>
 </header>
@@ -100,8 +98,7 @@ $user_name = 'Andrii Smerechynskyi'; // укажите здесь ваше им�
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
         <ul class="promo__list">
             <!--заполните этот список из массива категорий-->
-    <?php
-		foreach ($categories as $category) : ?>
+    <?php foreach ($categories as $category) : ?>
 			<li class="promo__item promo__item--boards">
                 <a class="promo__link" href="pages/all-lots.html"><?= $category; ?></a>
             </li>
@@ -114,18 +111,18 @@ $user_name = 'Andrii Smerechynskyi'; // укажите здесь ваше им�
         </div>
         <ul class="lots__list">
             <!--заполните этот список из массива с товарами-->
-    <?php foreach ($ads as $ads_item) : ?>
+    <?php foreach ($lots as $lot) : ?>
 		<li class="lots__item lot">
 			<div class="lot__image">
-				<img src="<?= $ads_item['url']; ?>" width="350" height="260" alt="">
+				<img src="<?= $lot['url']; ?>" width="350" height="260" alt="">
 			</div>
 			<div class="lot__info">
-				<span class="lot__category"><?= $ads_item['category']; ?></span>
-				<h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?= $ads_item['name']; ?></a></h3>
+				<span class="lot__category"><?= $lot['category']; ?></span>
+				<h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?= $lot['name']; ?></a></h3>
 				<div class="lot__state">
 					<div class="lot__rate">
 						<span class="lot__amount">Стартовая цена</span>
-						<span class="lot__cost"><?= $ads_item['price']; ?><b class="rub">р</b></span>
+						<span class="lot__cost"><?= $lot['price']; ?><b class="rub">р</b></span>
 					</div>
 					<div class="lot__timer timer">
 						12:23
@@ -143,11 +140,11 @@ $user_name = 'Andrii Smerechynskyi'; // укажите здесь ваше им�
     <nav class="nav">
         <ul class="nav__list container">
             <!--заполните этот список из массива категорий-->
-    <?php foreach ($categories as $category) : ?>           
-		   <li class="nav__item">
-			<a href="pages/all-lots.html"><?= $category;?></a>
+		<?php foreach ($categories as $category) : ?>           
+			<li class="nav__item">
+				<a href="pages/all-lots.html"><?= $category;?></a>
 			</li>
-	<?php endforeach; ?>
+		<?php endforeach; ?>
         </ul>
     </nav>
     <div class="main-footer__bottom container">
