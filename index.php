@@ -111,6 +111,14 @@ $user_name = 'Andrii Smerechynskyi';
         </div>
         <ul class="lots__list">
             <!--заполните этот список из массива с товарами-->
+	<?php function formatting_price ($price_formatted) {
+		$price_formatted = ceil($price_formatted);
+			if ($price_formatted >= 1000) { 
+			$price_formatted = number_format($price_formatted, 0, '', ' ');
+			}
+		return $price_formatted . ' <b class="rub">р</b>'; // добавлять вместе с классом или просто достаточно значка " &#8381;" ?
+		}
+	?>
     <?php foreach ($lots as $lot) : ?>
 		<li class="lots__item lot">
 			<div class="lot__image">
@@ -122,7 +130,7 @@ $user_name = 'Andrii Smerechynskyi';
 				<div class="lot__state">
 					<div class="lot__rate">
 						<span class="lot__amount">Стартовая цена</span>
-						<span class="lot__cost"><?= $lot['price']; ?><b class="rub">р</b></span>
+						<span class="lot__cost"><?= formatting_price ($lot['price']); ?><!--что делаем с этим кодом? <b class="rub">р</b>--></span>
 					</div>
 					<div class="lot__timer timer">
 						12:23
