@@ -1,4 +1,7 @@
 <?php
+
+require_once 'functions.php'; 
+
 $is_auth = rand(0, 1);
 
 $user_name = 'Andrii Smerechynskyi';
@@ -44,7 +47,7 @@ $user_name = 'Andrii Smerechynskyi';
 			  ],
 			];
 ?>
-<?php require_once 'functions.php'; ?>
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
