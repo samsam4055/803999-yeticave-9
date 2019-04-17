@@ -28,19 +28,4 @@ function esc(string $str): string {
 
 	return $text;
 };
- 
- /*   разбираюсь с добавлением класса timer--finishing
-function add_time_class($hours) {
-	$timer_finishing = '';
-	$ts_midnight = strtotime('tomorrow');
-	$secs_to_midnight = $ts_midnight - time();
 
-	$hours = floor($secs_to_midnight / 3600);
-	 
-	if ($hours === 0) {
-		$timer_finishing = 'timer--finishing';
-		
-	}
-	return $timer_finishing;
-}; 
-	*/
