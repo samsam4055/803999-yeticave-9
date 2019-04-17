@@ -2,6 +2,16 @@
 	$is_auth = rand(0, 1);
 	$user_name = 'Andrii Smerechynskyi';
 	$title = 'Главная';
+	
+	date_default_timezone_set("Europe/Moscow");
+	setlocale(LC_ALL, 'ru_RU');
+	$ts_midnight = strtotime('tomorrow');
+	$secs_to_midnight = $ts_midnight - time();
+
+	$hours = floor($secs_to_midnight / 3600);
+	$minutes = floor(($secs_to_midnight % 3600) / 60);
+	$lot_time = "$hours : $minutes";
+	
 	$categories = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
 
 	$lots = [

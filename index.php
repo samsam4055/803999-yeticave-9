@@ -5,7 +5,9 @@ require_once 'inc/data.php';
 
 $page_content = include_template('index.php', [
 	'lots' => $lots, 
-	'categories' => $categories
+	'categories' => $categories,
+	'lot_time' => $lot_time,
+	'hours' => $hours	
 ]);
 
 $layout_content = include_template('layout.php', [
@@ -14,6 +16,7 @@ $layout_content = include_template('layout.php', [
 	'title' => $title,
 	'is_auth' => $is_auth,
 	'user_name' => $user_name
+	
 ]);
 
 print($layout_content);
