@@ -6,7 +6,7 @@
             <!--заполните этот список из массива категорий-->
     <?php foreach ($categories as $category) : ?>
 			<li class="promo__item promo__item--boards">
-                <a class="promo__link" href="pages/all-lots.html"><?= $category; ?></a>
+                <a class="promo__link" href="pages/all-lots.html"><?= esc($category); ?></a>
             </li>
 	<?php endforeach; ?>
         </ul>
@@ -23,12 +23,12 @@
 				<img src="<?= $lot['url']; ?>" width="350" height="260" alt="">
 			</div>
 			<div class="lot__info">
-				<span class="lot__category"><?= $lot['category']; ?></span>
-				<h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?= $lot['name']; ?></a></h3>
+				<span class="lot__category"><?= esc($lot['category']); ?></span>
+				<h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?= esc($lot['name']); ?></a></h3>
 				<div class="lot__state">
 					<div class="lot__rate">
 						<span class="lot__amount">Стартовая цена</span>
-						<span class="lot__cost"><?= format_price ($lot['price']); ?><b class="rub">р</b></span>
+						<span class="lot__cost"><?= format_price (esc($lot['price'])); ?><b class="rub">р</b></span>
 					</div>
 					<div class="lot__timer timer">
 						12:23

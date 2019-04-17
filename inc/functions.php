@@ -21,4 +21,11 @@
     $result = ob_get_clean();
 
     return $result;
+};
+
+function esc($str) {
+	//$text = htmlspecialchars($str);
+	$text = strip_tags($str);
+
+	return $text;
 }
