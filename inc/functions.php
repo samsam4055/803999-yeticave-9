@@ -1,11 +1,15 @@
 <?php
 
+// функция форматирования цены
+
 	function format_price (float $price): string {
 		$price = ceil($price);
 		$price = number_format($price, 0, '', ' ');
 		return $price;
 	};
 	
+// 	функция подключения шаблонов
+
 	function include_template($name, array $data = []) {
     $name = 'templates/' . $name;
     $result = '';
@@ -22,6 +26,8 @@
 
     return $result;
 };
+
+// функция фильтрации пользовательских данных
 
 function esc($str) {
 	//$text = htmlspecialchars($str);
