@@ -21,11 +21,32 @@
     $result = ob_get_clean();
 
     return $result;
-};
+	};
 
-function esc(string $str): string {
-	$text = strip_tags($str);
+	function esc(string $str): string {
+		$text = strip_tags($str);
 
-	return $text;
-};
+		return $text;
+	};
 
+	date_default_timezone_set("Europe/Moscow");
+	setlocale(LC_ALL, 'ru_RU');
+	$ts_midnight = strtotime('tomorrow');
+	$secs_to_midnight = $ts_midnight - time();
+
+	$hours = floor($secs_to_midnight / 3600);
+	$minutes = floor(($secs_to_midnight % 3600) / 60);
+	$lot_time = "$hours : $minutes";
+
+	function add_time_class($timer_finishing) {
+		$ts_midnight = strtotime('tomorrow');
+		$secs_to_midnight = $ts_midnight - time();
+		$hours = floor($secs_to_midnight / 3600); 
+		
+		if (!$hours){
+			$timer_finishing = 'timer--finishing';
+		}	
+		else $timer_finishing = '';
+	
+	return $timer_finishing;
+	}; 

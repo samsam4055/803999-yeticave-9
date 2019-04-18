@@ -30,8 +30,8 @@
 						<span class="lot__amount">Стартовая цена</span>
 						<span class="lot__cost"><?= format_price (esc($lot['price'])); ?><b class="rub">р</b></span>
 					</div>
-					<div class="lot__timer timer">
-						12:33
+					<div class="lot__timer timer <?= add_time_class($hours); ?>">
+						<?= $lot_time; ?>
 					</div>
 				</div>
 			</div>
