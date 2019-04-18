@@ -36,6 +36,7 @@
 
 	$hours = floor($secs_to_midnight / 3600);
 	$minutes = floor(($secs_to_midnight % 3600) / 60);
+	$minutes = ($minutes < 10) ? 0 . $minutes : $minutes;
 	$lot_time = "$hours : $minutes";
 
 	function add_time_class($timer_finishing) {
