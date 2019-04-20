@@ -1,12 +1,14 @@
 <?php
 
-	function format_price (float $price): string {
-		$price = ceil($price);
-		$price = number_format($price, 0, '', ' ');
-		return $price;
-	};
+function format_price(float $price): string
+{
+    $price = ceil($price);
+    $price = number_format($price, 0, '', ' ');
+    return $price;
+}
 
-	function include_template(string $name, array $data = []): string {
+function include_template(string $name, array $data = []): string
+{
     $name = 'templates/' . $name;
     $result = '';
 
@@ -21,33 +23,36 @@
     $result = ob_get_clean();
 
     return $result;
-	};
+}
 
-	function esc(string $str): string {
-		$text = strip_tags($str);
+function esc(string $str): string
+{
+    $text = strip_tags($str);
+    return $text;
+}
 
-		return $text;
-	};
-
-	date_default_timezone_set("Europe/Moscow");
-	setlocale(LC_ALL, 'ru_RU');
-	$ts_midnight = strtotime('tomorrow');
-	$secs_to_midnight = $ts_midnight - time();
-
-	$hours = floor($secs_to_midnight / 3600);
-	$minutes = floor(($secs_to_midnight % 3600) / 60);
-	$minutes = ($minutes < 10) ? 0 . $minutes : $minutes;
-	$lot_time = "$hours : $minutes";
-
-	function add_time_class($timer_finishing) {
-		$ts_midnight = strtotime('tomorrow');
-		$secs_to_midnight = $ts_midnight - time();
-		$hours = floor($secs_to_midnight / 3600); 
-		
-		if (!$hours){
-			$timer_finishing = 'timer--finishing';
-		}	
-		else $timer_finishing = '';
+function get_lot_minutes_till_end(string $end_at): string
+{
+    $end_timestamp = strtotime($end_at);
+    $secs_to_end = $end_timestamp - time();
 	
-	return $timer_finishing;
-	}; 
+	if ($secs_to_end > 0) {
+    $hours = floor($secs_to_end / 3600);
+    $minutes = floor(($secs_to_end % 3600) / 60);
+    $minutes = ($minutes < 10) ? 0 . $minutes : $minutes;
+	} 
+	else {
+	$hours = 0;  
+	$minutes = "00";
+	}
+    
+	return "$hours : $minutes";
+}
+
+function add_time_class(string $lot_end_at): string
+{
+    $end_timestamp = strtotime($lot_end_at);
+    $secs_to_end = $end_timestamp - time();
+    $hours = floor($secs_to_end / 3600);
+    return $hours <= 0 ? 'timer--finishing' : '';
+}
