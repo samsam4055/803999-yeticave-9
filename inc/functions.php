@@ -31,28 +31,25 @@ function esc(string $str): string
     return $text;
 }
 
-function get_lot_minutes_till_end(string $end_at): string
+function get_hours_and_minutes_till_end(string $end_at): array
 {
-    $end_timestamp = strtotime($end_at);
-    $secs_to_end = $end_timestamp - time();
-	
-	if ($secs_to_end > 0) {
-    $hours = floor($secs_to_end / 3600);
-    $minutes = floor(($secs_to_end % 3600) / 60);
-    $minutes = ($minutes < 10) ? 0 . $minutes : $minutes;
-	} 
-	else {
-	$hours = 0;  
-	$minutes = "00";
-	}
+    $seconds_till_end = strtotime($end_at) - time();
     
-	return "$hours : $minutes";
+    return $seconds_till_end > 0 
+	? [ floor($seconds_till_end / 3600), floor(($seconds_till_end % 3600) / 60) ] 
+	: [0, 0];
 }
 
-function add_time_class(string $lot_end_at): string
+function get_lot_timer(string $end_at): string
 {
-    $end_timestamp = strtotime($lot_end_at);
-    $secs_to_end = $end_timestamp - time();
-    $hours = floor($secs_to_end / 3600);
+    list($hours, $minutes) = get_hours_and_minutes_till_end($end_at);
+    	    
+    return sprintf("%d:%02d", $hours, $minutes);
+}
+
+function add_time_class(string $end_at): string
+{
+    list($hours, $minutes) = get_hours_and_minutes_till_end($end_at);
+	
     return $hours <= 0 ? 'timer--finishing' : '';
 }

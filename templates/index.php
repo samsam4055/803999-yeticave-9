@@ -34,7 +34,7 @@
                                         class="rub">р</b></span>
                             </div>
                             <div class="lot__timer timer <?= add_time_class($lot['end_at']); ?>">
-                                <?= get_lot_minutes_till_end($lot['end_at']); ?>
+                                <?= get_lot_timer($lot['end_at']); ?>
                             </div>
                         </div>
                     </div>
