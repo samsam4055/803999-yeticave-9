@@ -31,7 +31,8 @@ CREATE TABLE rates (
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	amount FLOAT NOT NULL,
 	user_id INT NOT NULL,
-	lot_id INT NOT NULL
+	lot_id INT NOT NULL,
+	FOREIGN KEY (user_id)  REFERENCES users (id)
 );
 
 CREATE TABLE users (
