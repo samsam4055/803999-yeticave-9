@@ -12,6 +12,16 @@ CREATE TABLE categories (
 INSERT INTO categories
 (name, code) VALUES ('Доски и лыжи', 'skiing'), ('Крепления', 'mounts'), ('Ботинки', 'boots'), ('Одежда', 'clothing'), ('Инструменты', 'tools'), ('Разное', 'other');
 
+CREATE TABLE users (
+   id INT AUTO_INCREMENT PRIMARY KEY,
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   email CHAR(128) UNIQUE NOT NULL,
+   name CHAR NOT NULL,
+   password CHAR(64) NOT NULL,
+   contact CHAR(128) NOT NULL,
+   avatar CHAR(128)
+);
+
 CREATE TABLE lots (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -35,14 +45,4 @@ CREATE TABLE rates (
 	user_id INT NOT NULL,
 	lot_id INT NOT NULL,
 	FOREIGN KEY (user_id)  REFERENCES users (id)
-);
-
-CREATE TABLE users (
-   id INT AUTO_INCREMENT PRIMARY KEY,
-   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-   email CHAR(128) UNIQUE NOT NULL,
-   name CHAR NOT NULL,
-   password CHAR(64) NOT NULL,
-   contact CHAR(128) NOT NULL,
-   avatar CHAR(128)
 );
