@@ -15,7 +15,7 @@ INSERT INTO lots
 	('Маска Oakley Canopy', 'Описание лота 6', 'img/lot-6.jpg', '5400', '2019-04-22', '100', '1', '6');
 
 INSERT INTO rates
-(amount, user_id, lot_id) VALUES ('12000', '1', '1'), ('170000', '2', '2')
+(amount, user_id, lot_id) VALUES ('12000', '1', '1'), ('170000', '2', '2');
 
 /* получить все категории */
 SELECT * FROM categories;
