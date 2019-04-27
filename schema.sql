@@ -12,18 +12,18 @@ CREATE TABLE categories (
 CREATE TABLE users (
    id INT AUTO_INCREMENT PRIMARY KEY,
    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-   email CHAR(128) UNIQUE NOT NULL,
+   email CHAR(128) NOT NULL UNIQUE,
    name CHAR(64) NOT NULL,
    password CHAR(64) NOT NULL,
-   contact CHAR(128) NOT NULL,
-   avatar CHAR(128)
+   contact TEXT NOT NULL,
+   avatar_url CHAR(128)
 );
 
 CREATE TABLE lots (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name CHAR(128) NOT NULL,
-	description MEDIUMTEXT NOT NULL,
+	description TEXT NOT NULL,
 	img CHAR(128) NOT NULL,
 	start_price FLOAT NOT NULL,
 	end_at DATETIME NOT NULL,
@@ -32,7 +32,8 @@ CREATE TABLE lots (
 	winner_id INT,
 	category_id INT NOT NULL,
 	FOREIGN KEY (user_id)  REFERENCES users (id),
-	FOREIGN KEY (category_id)  REFERENCES categories (id)
+	FOREIGN KEY (category_id)  REFERENCES categories (id),
+	FOREIGN KEY (winner_id)  REFERENCES users (id)
 );
 
 CREATE TABLE rates (
