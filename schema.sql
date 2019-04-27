@@ -41,5 +41,6 @@ CREATE TABLE rates (
 	amount FLOAT NOT NULL,
 	user_id INT NOT NULL,
 	lot_id INT NOT NULL,
-	FOREIGN KEY (user_id)  REFERENCES users (id)
+	FOREIGN KEY (user_id)  REFERENCES users (id),
+	FOREIGN KEY (lot_id)  REFERENCES lots (id)
 );
