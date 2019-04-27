@@ -9,9 +9,6 @@ CREATE TABLE categories (
 	code CHAR(64) UNIQUE
 );
 
-INSERT INTO categories
-(name, code) VALUES ('Доски и лыжи', 'skiing'), ('Крепления', 'mounts'), ('Ботинки', 'boots'), ('Одежда', 'clothing'), ('Инструменты', 'tools'), ('Разное', 'other');
-
 CREATE TABLE users (
    id INT AUTO_INCREMENT PRIMARY KEY,
    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
