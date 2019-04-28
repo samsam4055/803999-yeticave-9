@@ -9,24 +9,31 @@ mysqli_set_charset($link, "utf8");
 
 if (!$link) {
     $error = mysqli_connect_error();
-    $content = include_template('error.php', ['error' => $error]);
+    print("Ошибка подключения MySQL: " . $error);
 }
 else {
     $sql = 'SELECT `code`, `name` FROM categories';
     $result = mysqli_query($link, $sql);
 
-    if ($result) {
-        $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    if (!$result) {
+        $error = mysqli_error($link);
+        print("Ошибка MySQL: " . $error);
     }
+    else
+        $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
     $sql = "SELECT lots.name AS name, categories.name
-    AS category, start_price, img_url, end_at FROM lots 
+    AS category, start_price, img_url, end_at FROM lots
     JOIN categories ON categories.id = category_id
     ORDER BY lots.end_at ASC";
     $result = mysqli_query($link, $sql);
 
-    if ($result) {
-        $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    if (!$result) {
+        $error = mysqli_error($link);
+        print("Ошибка MySQL: " . $error);
     }
+    else
+        $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
 $page_content = include_template('index.php', [
