@@ -6,7 +6,14 @@ $title = 'Главная';
 date_default_timezone_set("Europe/Moscow");
 setlocale(LC_ALL, 'ru_RU');
 
-$categories = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
+$db = [
+  "host" => "localhost",
+  "user" => "root",
+  "password" => "",
+  "database" => "yeticave",
+];
+
+// $categories = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
 
 $lots = [
     [
