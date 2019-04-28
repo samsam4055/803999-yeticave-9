@@ -12,11 +12,17 @@ if (!$link) {
     $content = include_template('error.php', ['error' => $error]);
 }
 else {
-    $sql = 'SELECT `id`, `name` FROM categories';
+    $sql = 'SELECT `code`, `name` FROM categories';
     $result = mysqli_query($link, $sql);
 
     if ($result) {
         $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    $sql = 'SELECT * FROM lots';
+    $result = mysqli_query($link, $sql);
+
+    if ($result) {
+        $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
 }
 

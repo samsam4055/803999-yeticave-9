@@ -1,6 +1,6 @@
 
 INSERT INTO categories
-(id, name, code) VALUES ('1', 'Доски и лыжи', 'skiing'), ('2', 'Крепления', 'mounts'), ('3','Ботинки', 'boots'), ('4','Одежда', 'clothing'), ('5', 'Инструменты', 'tools'), ('6', 'Разное', 'other');
+(id, name, code) VALUES ('1', 'Доски и лыжи', 'boards'), ('2', 'Крепления', 'attachment'), ('3','Ботинки', 'boots'), ('4','Одежда', 'clothing'), ('5', 'Инструменты', 'tools'), ('6', 'Разное', 'other');
 
 INSERT INTO users
 (id, email, name, password, contact, avatar_url) VALUES ('1', 'a1@mail.ua', 'Вася', 'pass1', 'улица Пушкина', 'img/ava1.jpg'), ('2', 'a2@mail.ua', 'Петя', 'pass2', 'улица Шевченко', 'img/ava2.jpg');
