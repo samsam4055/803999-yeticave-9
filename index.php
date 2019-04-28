@@ -18,7 +18,10 @@ else {
     if ($result) {
         $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
-    $sql = 'SELECT * FROM lots';
+    $sql = "SELECT lots.name AS name, categories.name
+    AS category, start_price, img_url, end_at FROM lots 
+    JOIN categories ON categories.id = category_id
+    ORDER BY lots.end_at ASC";
     $result = mysqli_query($link, $sql);
 
     if ($result) {
