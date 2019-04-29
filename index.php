@@ -13,7 +13,10 @@ if (!$link) {
 }
 else {
     $sql = 'SELECT `code`, `name` FROM categories';
-    $result = mysqli_query($link, $sql);
+    
+	$stmt = db_get_prepare_stmt($link, $sql);
+	mysqli_stmt_execute($stmt);
+	$result = mysqli_stmt_get_result($stmt);
 
     if (!$result) {
         $error = mysqli_error($link);
@@ -26,7 +29,10 @@ else {
     AS category, start_price, img_url, end_at FROM lots
     JOIN categories ON categories.id = category_id
     ORDER BY lots.end_at ASC";
-    $result = mysqli_query($link, $sql);
+    
+	$stmt = db_get_prepare_stmt($link, $sql);
+	mysqli_stmt_execute($stmt);
+	$result = mysqli_stmt_get_result($stmt);
 
     if (!$result) {
         $error = mysqli_error($link);
