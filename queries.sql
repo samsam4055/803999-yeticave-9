@@ -21,12 +21,13 @@ INSERT INTO rates
 SELECT * FROM categories;
 
 /* получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, ссылку на изображение, цену, название категории */
-SELECT l.name, l.img_url, l.start_price, c.name, r.amount FROM lots AS l
-    LEFT JOIN categories AS c ON l.category_id = c.id
-		LEFT JOIN rates AS r ON l.category_id = r.id
-    WHERE l.winner_id IS NULL AND l.end_at >= CURDATE()
-		ORDER BY l.created_at DESC
-		LIMIT 5;
+SELECT DISTINCT l.id, l.name AS title, start_price, img_url AS img_url, c.name AS category, MAX(IF(amount IS NULL, start_price, amount)) AS price
+  FROM lots l
+  JOIN categories c ON l.category_id = c.id
+  LEFT JOIN rates r ON l.id = r.lot_id
+  WHERE end_at > CURRENT_TIMESTAMP and winner_id IS NULL
+  GROUP BY l.id, l.name, start_price, img_url, c.name
+  ORDER BY l.id DESC;
 
 /* показать лот по его id и название категории*/
 SELECT l.id, l.name, c.name FROM lots AS l
