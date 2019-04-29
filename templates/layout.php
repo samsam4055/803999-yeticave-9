@@ -23,14 +23,14 @@
 
         <nav class="user-menu">
 
-		<?php if ($is_auth === 1) : ?> 
-			
+		<?php if ($is_auth === 1) : ?>
+
 			<div class="user-menu__logged">
 				<p><?= esc($user_name); ?></p>
 				<a class="user-menu__bets" href="pages/my-bets.html">Мои ставки</a>
 				<a class="user-menu__logout" href="#">Выход</a>
 			</div>
-		<?php else : ?> 
+		<?php else : ?>
 			<ul class="user-menu__list">
 				<li class="user-menu__item">
 				  <a href="#">Регистрация</a>
@@ -52,10 +52,10 @@
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">
-          
-		<?php foreach ($categories as $category) : ?>           
+
+		<?php foreach ($categories as $category) : ?>
 			<li class="nav__item">
-				<a href="pages/all-lots.html"><?= esc($category);?></a>
+				<a href="pages/all-lots.html"><?= esc($category['name']);?></a>
 			</li>
 		<?php endforeach; ?>
         </ul>

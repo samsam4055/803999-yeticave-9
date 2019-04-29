@@ -24,7 +24,7 @@ CREATE TABLE lots (
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name CHAR(128) NOT NULL,
 	description TEXT NOT NULL,
-	img CHAR(128) NOT NULL,
+	img_url CHAR(128) NOT NULL,
 	start_price FLOAT NOT NULL,
 	end_at DATETIME NOT NULL,
 	rate_step INT NOT NULL,
