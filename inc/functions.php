@@ -99,33 +99,38 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
     return $stmt;
 }
 
+function fetch_data($link, string $sql): array 
+{
+	$stmt = db_get_prepare_stmt($link, $sql);
+	mysqli_stmt_execute($stmt);
+	$result = mysqli_stmt_get_result($stmt);
+
+	if (!$result) {
+		$error = mysqli_error($link);
+		print("Ошибка MySQL: " . $error);
+	}
+	else
+		return $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
 function get_categories($link): array
 {
     if (!$link) {
     $error = mysqli_connect_error();
     print("Ошибка подключения MySQL: " . $error);
 	}
-else {
-    $sql_cat = 'SELECT `code`, `name` FROM categories';
+	else {
+		$sql_cat = 'SELECT `code`, `name` FROM categories';
 
-    $stmt = db_get_prepare_stmt($link, $sql_cat);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-
-    if (!$result) {
-        $error = mysqli_error($link);
-        print("Ошибка MySQL: " . $error);
-		}
-    else
-		return $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+		return fetch_data($link, $sql_cat);
 	}
 }
 
 function get_active_lots($link): array
 {
-    if (!$link) {
-    $error = mysqli_connect_error();
-    print("Ошибка подключения MySQL: " . $error);
+	if (!$link) {
+	$error = mysqli_connect_error();
+	print("Ошибка подключения MySQL: " . $error);
 	}
 	else {
 		$sql_lots = "SELECT lots.name AS name, categories.name
@@ -134,15 +139,6 @@ function get_active_lots($link): array
 		WHERE end_at > NOW() and winner_id IS NULL
 		ORDER BY lots.created_at DESC LIMIT 9";
 
-		$stmt = db_get_prepare_stmt($link, $sql_lots);
-		mysqli_stmt_execute($stmt);
-		$result = mysqli_stmt_get_result($stmt);
-
-    if (!$result) {
-        $error = mysqli_error($link);
-        print("Ошибка MySQL: " . $error);
-		}
-    else
-		return  $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
+		return fetch_data($link, $sql_lots);
 	}
 }
