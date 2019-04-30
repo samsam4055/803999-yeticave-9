@@ -110,7 +110,7 @@ function fetch_data($link, string $sql): array
 		print("Ошибка MySQL: " . $error);
 	}
 	else
-		return $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+		return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
 function get_categories($link): array
