@@ -102,14 +102,15 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 function fetch_data($link, string $sql): array 
 {
 	$stmt = db_get_prepare_stmt($link, $sql);
-	mysqli_stmt_execute($stmt);
+	
+	if (!mysqli_stmt_execute($stmt)) {
+		die("Ошибка MySQL: " . mysqli_error($link));
+	}
 	$result = mysqli_stmt_get_result($stmt);
 
 	if (!$result) {
-		$error = mysqli_error($link);
-		die("Ошибка MySQL: " . $error);
+		die("Ошибка MySQL: " . mysqli_error($link));
 	}
-
 	return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
