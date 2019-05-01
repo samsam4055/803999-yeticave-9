@@ -107,38 +107,26 @@ function fetch_data($link, string $sql): array
 
 	if (!$result) {
 		$error = mysqli_error($link);
-		print("Ошибка MySQL: " . $error);
+		die("Ошибка MySQL: " . $error);
 	}
-	else
-		return mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+	return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
 function get_categories($link): array
 {
-    if (!$link) {
-    $error = mysqli_connect_error();
-    print("Ошибка подключения MySQL: " . $error);
-	}
-	else {
-		$sql_cat = 'SELECT `code`, `name` FROM categories';
+	$sql_cat = 'SELECT `code`, `name` FROM categories';
 
-		return fetch_data($link, $sql_cat);
-	}
+	return fetch_data($link, $sql_cat);
 }
 
 function get_active_lots($link): array
 {
-	if (!$link) {
-	$error = mysqli_connect_error();
-	print("Ошибка подключения MySQL: " . $error);
-	}
-	else {
-		$sql_lots = "SELECT lots.name AS name, categories.name
-		AS category, start_price, img_url, end_at FROM lots
-		JOIN categories ON categories.id = category_id
-		WHERE end_at > NOW() and winner_id IS NULL
-		ORDER BY lots.created_at DESC LIMIT 9";
+	$sql_lots = "SELECT lots.name AS name, categories.name
+	AS category, start_price, img_url, end_at FROM lots
+	JOIN categories ON categories.id = category_id
+	WHERE end_at > NOW() and winner_id IS NULL
+	ORDER BY lots.created_at DESC LIMIT 9";
 
-		return fetch_data($link, $sql_lots);
-	}
+	return fetch_data($link, $sql_lots);
 }

@@ -16,8 +16,9 @@ $db = [
 $link = mysqli_connect($db['host'], $db['user'], $db['password'], $db['database']);
 
 if (!$link) {
-    print("Ошибка подключения: " . mysqli_connect_error());
-    die();
+    die("Ошибка подключения: " . mysqli_connect_error());
 }
 
-mysqli_set_charset($link, "utf8");
+if (!mysqli_set_charset($link, "utf8")) {
+     die("Ошибка подключения: " . mysqli_error($link));
+}
