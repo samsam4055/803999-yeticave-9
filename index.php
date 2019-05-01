@@ -3,6 +3,9 @@
 require_once 'inc/functions.php';
 require_once 'inc/data.php';
 
+$categories = get_categories($link);
+$lots = get_active_lots($link);
+
 $page_content = include_template('index.php', [
     'lots' => $lots,
     'categories' => $categories,

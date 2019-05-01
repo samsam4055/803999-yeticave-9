@@ -98,3 +98,36 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 
     return $stmt;
 }
+
+function fetch_data($link, string $sql): array 
+{
+	$stmt = db_get_prepare_stmt($link, $sql);
+	
+	if (!mysqli_stmt_execute($stmt)) {
+		die("Ошибка MySQL: " . mysqli_error($link));
+	}
+	$result = mysqli_stmt_get_result($stmt);
+
+	if (!$result) {
+		die("Ошибка MySQL: " . mysqli_error($link));
+	}
+	return mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+function get_categories($link): array
+{
+	$sql_cat = 'SELECT `code`, `name` FROM categories';
+
+	return fetch_data($link, $sql_cat);
+}
+
+function get_active_lots($link): array
+{
+	$sql_lots = "SELECT lots.name AS name, categories.name
+	AS category, start_price, img_url, end_at FROM lots
+	JOIN categories ON categories.id = category_id
+	WHERE end_at > NOW() and winner_id IS NULL
+	ORDER BY lots.created_at DESC LIMIT 9";
+
+	return fetch_data($link, $sql_lots);
+}
