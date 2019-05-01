@@ -20,5 +20,5 @@ if (!$link) {
 }
 
 if (!mysqli_set_charset($link, "utf8")) {
-     die("Ошибка подключения: " . mysqli_error($link));
+    die("Ошибка подключения: " . mysqli_error($link));
 }
