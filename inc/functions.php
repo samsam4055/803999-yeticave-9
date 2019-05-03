@@ -99,10 +99,10 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
     return $stmt;
 }
 
-function fetch_data($link, string $sql): array 
+function fetch_data($link, string $sql): array
 {
 	$stmt = db_get_prepare_stmt($link, $sql);
-	
+
 	if (!mysqli_stmt_execute($stmt)) {
 		die("Ошибка MySQL: " . mysqli_error($link));
 	}
@@ -133,7 +133,7 @@ function get_active_lots($link): array
 }
 
 function get_lot_by_id($link, $sql_lot_id): array
-{ 
+{
 	$sql_one_lot = "SELECT lots.name AS name, lots.id, lots.description, categories.name
 	AS category, start_price, img_url, end_at, MAX(IF(amount IS NULL, start_price, amount)) AS price, MAX(IF(amount IS NULL, start_price, amount))+rate_step AS new_price FROM lots
 	LEFT JOIN categories ON categories.id = category_id
