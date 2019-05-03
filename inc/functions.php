@@ -137,11 +137,10 @@ function get_one_lot($link): array
 	// этот запрос должна формировать отдельная функция, которая будет считывать id конкретного лота со строки url 
 	// и отдавать готовый запрос (текущий запрос сейчас создан для тестов...)
 	$sql_one_lot = "SELECT lots.name AS name, lots.id, lots.description, categories.name
-	AS category, start_price, img_url, end_at, amount FROM lots
-	JOIN categories ON categories.id = category_id
+	AS category, start_price, img_url, end_at, MAX(IF(amount IS NULL, start_price, amount)) AS price FROM lots
+	LEFT JOIN categories ON categories.id = category_id
 	LEFT JOIN rates r ON lots.id = r.lot_id
-	WHERE end_at > NOW() and winner_id IS NULL
-	ORDER BY lots.created_at DESC LIMIT 1";
+	WHERE lots.id = 6"; // тут подставляем id лота со строки url
 
 	return fetch_data($link, $sql_one_lot);
 }
