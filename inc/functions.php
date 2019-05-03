@@ -123,7 +123,7 @@ function get_categories($link): array
 
 function get_active_lots($link): array
 {
-	$sql_lots = "SELECT lots.name AS name, categories.name
+	$sql_lots = "SELECT lots.name AS name, lots.id, categories.name
 	AS category, start_price, img_url, end_at FROM lots
 	JOIN categories ON categories.id = category_id
 	WHERE end_at > NOW() and winner_id IS NULL
