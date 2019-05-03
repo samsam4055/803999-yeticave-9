@@ -131,3 +131,17 @@ function get_active_lots($link): array
 
 	return fetch_data($link, $sql_lots);
 }
+
+function get_one_lot($link): array
+{
+	// этот запрос должна формировать отдельная функция, которая будет считывать id конкретного лота со строки url 
+	// и отдавать готовый запрос (текущий запрос сейчас создан для тестов...)
+	$sql_one_lot = "SELECT lots.name AS name, lots.id, lots.description, categories.name
+	AS category, start_price, img_url, end_at, amount FROM lots
+	JOIN categories ON categories.id = category_id
+	LEFT JOIN rates r ON lots.id = r.lot_id
+	WHERE end_at > NOW() and winner_id IS NULL
+	ORDER BY lots.created_at DESC LIMIT 1";
+
+	return fetch_data($link, $sql_one_lot);
+}

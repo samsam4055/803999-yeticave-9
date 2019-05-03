@@ -6,7 +6,7 @@ require_once 'inc/functions.php';
 require_once 'inc/data.php';
 
 $categories = get_categories($link);
-$lots = get_active_lots($link);
+$lots = get_one_lot($link);
 
 $page_content = include_template('lot.php', [
     'lots' => $lots,
