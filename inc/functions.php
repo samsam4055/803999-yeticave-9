@@ -132,15 +132,13 @@ function get_active_lots($link): array
 	return fetch_data($link, $sql_lots);
 }
 
-function get_one_lot($link): array
-{
-	// этот запрос должна формировать отдельная функция, которая будет считывать id конкретного лота со строки url 
-	// и отдавать готовый запрос (текущий запрос сейчас создан для тестов...)
+function get_lot_by_id($link, $sql_lot_id): array
+{ 
 	$sql_one_lot = "SELECT lots.name AS name, lots.id, lots.description, categories.name
 	AS category, start_price, img_url, end_at, MAX(IF(amount IS NULL, start_price, amount)) AS price, MAX(IF(amount IS NULL, start_price, amount))+rate_step AS new_price FROM lots
 	LEFT JOIN categories ON categories.id = category_id
 	LEFT JOIN rates r ON lots.id = r.lot_id
-	WHERE lots.id = 6"; // тут подставляем id лота со строки url
+	WHERE lots.id =" . $sql_lot_id;
 
 	return fetch_data($link, $sql_one_lot);
 }
