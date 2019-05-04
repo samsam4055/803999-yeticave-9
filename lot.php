@@ -9,8 +9,13 @@ if (isset($_GET['id']) && !empty($_GET['id']) && is_numeric($_GET['id'])){
 
   $lot = get_lot_by_id($link, (int)$_GET['id']);
 }
-else
-	list($page_content, $title) = get_404();
+else {
+  http_response_code(404);
+  $title = "Страница не найдена";
+  $page_content = include_template ('404.php', [
+    'categories' => $categories
+    ]);
+}
 
 if (is_numeric($_GET['id']) && $lot['id']) {
   $title = $lot['name'];
@@ -19,15 +24,19 @@ if (is_numeric($_GET['id']) && $lot['id']) {
     'categories' => $categories,
     ]);
 }
-else
-	list($page_content, $title) = get_404();
-
+else {
+http_response_code(404);
+  $title = "Страница не найдена";
+  $page_content = include_template ('404.php', [
+      'categories' => $categories
+    ]);
+}
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'categories' => $categories,
     'title' => $title,
     'is_auth' => $is_auth,
     'user_name' => $user_name
-]);
+  ]);
 
 print($layout_content);
