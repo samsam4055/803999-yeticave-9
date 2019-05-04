@@ -9,7 +9,6 @@
       </ul>
     </nav>
     <section class="lot-item container">
-      <?php foreach ($lots as $lot) : ?>
 	  <h2><?= esc($lot['name']); ?></h2>
       <div class="lot-item__content">
         <div class="lot-item__left">
@@ -33,7 +32,6 @@
                 Мин. ставка <span><?= format_price(esc($lot['new_price'])); ?> р</span>
               </div>
             </div>
-			 <?php endforeach; ?>
             <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post" autocomplete="off">
               <p class="lot-item__form-item form__item form__item--invalid">
                 <label for="cost">Ваша ставка</label>

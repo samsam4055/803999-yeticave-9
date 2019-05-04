@@ -1,7 +1,5 @@
 <?php
 
-$title = 'Лот';
-
 require_once 'inc/functions.php';
 require_once 'inc/data.php';
 
@@ -10,9 +8,16 @@ $categories = get_categories($link);
 if (isset($_GET['id']) && !empty($_GET['id'])){
     
     $lots = get_lot_by_id($link, $_GET['id']);
-
+    $lot = array();
+    foreach($lots as $lot){
+		foreach($lot as $val)
+		{
+        array_push($lot, $val);
+		}    
+    }
+    $title = esc($lot['name']);
     $page_content = include_template('lot.php', [
-        'lots' => $lots,
+        'lot' => $lot,
         'categories' => $categories,
     ]);
 }
