@@ -142,3 +142,9 @@ function get_lot_by_id($link, $sql_lot_id): array
 
 	return fetch_data($link, $sql_one_lot);
 }
+function get_404() {
+	
+    $page_content = require_once ('pages\404.html');
+	$title = "Страница не найдена";
+	return array($page_content, $title);
+}

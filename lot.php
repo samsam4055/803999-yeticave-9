@@ -15,15 +15,22 @@ if (isset($_GET['id']) && !empty($_GET['id'])){
         array_push($lot, $val);
 		}    
     }
-    $title = esc($lot['name']);
-    $page_content = include_template('lot.php', [
-        'lot' => $lot,
-        'categories' => $categories,
-    ]);
 }
 else {
     http_response_code(404);
-    $content = require_once ('pages\404.html');
+	list($page_content, $title) = get_404();
+}
+
+if ($lot['name']) {
+    $title = esc($lot['name']);
+    $page_content = include_template('lot.php', [
+	'lot' => $lot,
+	'categories' => $categories,
+    ]);
+} 
+else {
+    http_response_code(404);
+	list($page_content, $title) = get_404();
 }
 
 $layout_content = include_template('layout.php', [
