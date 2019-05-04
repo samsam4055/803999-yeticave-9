@@ -132,19 +132,20 @@ function get_active_lots($link): array
 	return fetch_data($link, $sql_lots);
 }
 
-function get_lot_by_id($link, $sql_lot_id): array
+function get_lot_by_id($link, int $lot_id): array
 {
 	$sql_one_lot = "SELECT lots.name AS name, lots.id, lots.description, categories.name
 	AS category, start_price, img_url, end_at, MAX(IF(amount IS NULL, start_price, amount)) AS price, MAX(IF(amount IS NULL, start_price, amount))+rate_step AS new_price FROM lots
 	LEFT JOIN categories ON categories.id = category_id
 	LEFT JOIN rates r ON lots.id = r.lot_id
-	WHERE lots.id =" . $sql_lot_id;
+	WHERE lots.id = $lot_id";
 
 	return fetch_data($link, $sql_one_lot);
 }
+
 function get_404() {
 	
-    $page_content = require_once ('pages\404.html');
+    $page_content = include_template ('404.php');
 	$title = "Страница не найдена";
-	return array($page_content, $title);
+	return array($page_content, $title, http_response_code(404));
 }

@@ -5,9 +5,9 @@ require_once 'inc/data.php';
 
 $categories = get_categories($link);
 
-if (isset($_GET['id']) && !empty($_GET['id'])){
+if (isset($_GET['id']) && !empty($_GET['id']) && is_numeric($_GET['id'])){
     
-    $lots = get_lot_by_id($link, $_GET['id']);
+    $lots = get_lot_by_id($link, (int)$_GET['id']);
     $lot = array();
     foreach($lots as $lot){
 		foreach($lot as $val)
@@ -16,22 +16,18 @@ if (isset($_GET['id']) && !empty($_GET['id'])){
 		}    
     }
 }
-else {
-    http_response_code(404);
+else   
 	list($page_content, $title) = get_404();
-}
 
-if ($lot['id']) {
-    $title = esc($lot['name']);
+if (is_numeric($_GET['id']) && $lot['id']) {
+    $title = $lot['name'];
     $page_content = include_template('lot.php', [
 	'lot' => $lot,
 	'categories' => $categories,
     ]);
 } 
-else {
-    http_response_code(404);
+else     
 	list($page_content, $title) = get_404();
-}
 
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
