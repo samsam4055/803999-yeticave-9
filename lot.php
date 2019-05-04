@@ -21,7 +21,7 @@ else {
 	list($page_content, $title) = get_404();
 }
 
-if ($lot['name']) {
+if ($lot['id']) {
     $title = esc($lot['name']);
     $page_content = include_template('lot.php', [
 	'lot' => $lot,
