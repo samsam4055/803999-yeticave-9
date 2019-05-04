@@ -139,13 +139,13 @@ function get_lot_by_id($link, int $lot_id): array
 	LEFT JOIN categories ON categories.id = category_id
 	LEFT JOIN rates r ON lots.id = r.lot_id
 	WHERE lots.id = $lot_id";
-
-	return fetch_data($link, $sql_one_lot);
+  $result = fetch_data($link, $sql_one_lot);
+	return count($result) === 1 ? $result[0] : [];
 }
 
 function get_404() {
-	
-    $page_content = include_template ('404.php');
-	$title = "Страница не найдена";
-	return array($page_content, $title, http_response_code(404));
+
+  $page_content = include_template ('404.php');
+  $title = "Страница не найдена";
+  return array($page_content, $title, http_response_code(404));
 }
