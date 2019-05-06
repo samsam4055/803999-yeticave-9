@@ -5,7 +5,7 @@ require_once 'inc/data.php';
 
 $categories = get_categories($link);
 
-if (isset($_GET['id']) && !empty($_GET['id']) && is_numeric($_GET['id'])){
+if (!empty($_GET['id']) && is_numeric($_GET['id'])){
 
   $lot = get_lot_by_id($link, (int)$_GET['id']);
 }
@@ -17,7 +17,7 @@ else {
     ]);
 }
 
-if (is_numeric($_GET['id']) && $lot['id']) {
+if (!empty ($lot['id'])) {
   $title = $lot['name'];
   $page_content = include_template('lot.php', [
     'lot' => $lot,
