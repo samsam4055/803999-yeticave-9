@@ -1,24 +1,11 @@
 <main>
     <nav class="nav">
       <ul class="nav__list container">
-        <li class="nav__item">
-          <a href="all-lots.html">Доски и лыжи</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Крепления</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Ботинки</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Одежда</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Инструменты</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Разное</a>
-        </li>
+        <?php foreach ($categories as $category) : ?>
+            <li class="nav__item">
+                <a href="all-lots.html"><?= esc($category['name']); ?></a>
+            </li>
+        <?php endforeach; ?>
       </ul>
     </nav>
     <form class="form form--add-lot container form--invalid" action="https://echo.htmlacademy.ru" method="post"> <!-- form--invalid -->
@@ -33,12 +20,9 @@
           <label for="category">Категория <sup>*</sup></label>
           <select id="category" name="category">
             <option>Выберите категорию</option>
-            <option>Доски и лыжи</option>
-            <option>Крепления</option>
-            <option>Ботинки</option>
-            <option>Одежда</option>
-            <option>Инструменты</option>
-            <option>Разное</option>
+            <?php foreach ($categories as $category) : ?>
+			<option><?= esc($category['name']); ?></option>
+            <?php endforeach; ?>
           </select>
           <span class="form__error">Выберите категорию</span>
         </div>
