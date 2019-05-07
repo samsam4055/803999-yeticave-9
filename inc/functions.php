@@ -138,7 +138,7 @@ function get_lot_by_id($link, int $lot_id): array
 	AS category, start_price, img_url, end_at, MAX(IF(amount IS NULL, start_price, amount)) AS price, MAX(IF(amount IS NULL, start_price, amount))+rate_step AS new_price FROM lots
 	LEFT JOIN categories ON categories.id = category_id
 	LEFT JOIN rates r ON lots.id = r.lot_id
-	WHERE lots.id = $lot_id";
+	WHERE lots.id = ${lot_id} GROUP BY lots.id";
 	$result = fetch_data($link, $sql_one_lot);
 	return count($result) === 1 ? $result[0] : [];
 }

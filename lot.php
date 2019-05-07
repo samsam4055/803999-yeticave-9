@@ -12,7 +12,7 @@ if (empty($_GET['id']) || !is_numeric($_GET['id'])){
 
 $lot = get_lot_by_id($link, (int)$_GET['id']);
 
-if (empty ($lot['id'])) {
+if (empty ($lot)) {
     $errorMessage = "Лот не найден.";
     render404($categories, $is_auth, $user_name, $errorMessage);
 }
