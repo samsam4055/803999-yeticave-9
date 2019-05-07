@@ -11,6 +11,6 @@
         </nav>
         <section class="lot-item container">
             <h2>404 Страница не найдена</h2>
-            <p><?= $errorMessage; ?></p>
+            <p><?= $error_message; ?></p>
         </section>
     </main>

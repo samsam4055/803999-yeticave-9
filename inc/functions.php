@@ -143,13 +143,13 @@ function get_lot_by_id($link, int $lot_id): array
 	return count($result) === 1 ? $result[0] : [];
 }
 
-function render404($categories, $is_auth, $user_name, $errorMessage) { 
+function render404($categories, $is_auth, $user_name, $error_message) { 
 
 	http_response_code(404);
 	$title = "Страница не найдена";
 	$page_content = include_template ('404.php', [
 	'categories' => $categories,
-	'errorMessage' => $errorMessage
+	'error_message' => $error_message
 	]);
 
 	$layout_content = include_template('layout.php', [
