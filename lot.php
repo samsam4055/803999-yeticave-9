@@ -5,7 +5,7 @@ require_once 'inc/data.php';
 
 $categories = get_categories($link);
 
-if (empty($_GET['id']) && !is_numeric($_GET['id'])){
+if (empty($_GET['id']) || !is_numeric($_GET['id'])){
     $errorMessage = "Данной страницы не существует на сайте.";
     render404($categories, $is_auth, $user_name, $errorMessage);
 }
