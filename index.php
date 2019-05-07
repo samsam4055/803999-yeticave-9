@@ -1,5 +1,7 @@
 <?php
 
+$title = 'Главная';
+
 require_once 'inc/functions.php';
 require_once 'inc/data.php';
 

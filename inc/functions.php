@@ -99,10 +99,10 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
     return $stmt;
 }
 
-function fetch_data($link, string $sql): array 
+function fetch_data($link, string $sql): array
 {
 	$stmt = db_get_prepare_stmt($link, $sql);
-	
+
 	if (!mysqli_stmt_execute($stmt)) {
 		die("Ошибка MySQL: " . mysqli_error($link));
 	}
@@ -123,11 +123,42 @@ function get_categories($link): array
 
 function get_active_lots($link): array
 {
-	$sql_lots = "SELECT lots.name AS name, categories.name
+	$sql_lots = "SELECT lots.name AS name, lots.id, categories.name
 	AS category, start_price, img_url, end_at FROM lots
 	JOIN categories ON categories.id = category_id
 	WHERE end_at > NOW() and winner_id IS NULL
 	ORDER BY lots.created_at DESC LIMIT 9";
 
 	return fetch_data($link, $sql_lots);
+}
+
+function get_lot_by_id($link, int $lot_id): array
+{
+	$sql_one_lot = "SELECT lots.name AS name, lots.id, lots.description, categories.name
+	AS category, start_price, img_url, end_at, MAX(IF(amount IS NULL, start_price, amount)) AS price, MAX(IF(amount IS NULL, start_price, amount))+rate_step AS new_price FROM lots
+	LEFT JOIN categories ON categories.id = category_id
+	LEFT JOIN rates r ON lots.id = r.lot_id
+	WHERE lots.id = ${lot_id} GROUP BY lots.id";
+	$result = fetch_data($link, $sql_one_lot);
+	return count($result) === 1 ? $result[0] : [];
+}
+
+function render404($categories, $is_auth, $user_name, $errorMessage) { 
+
+	http_response_code(404);
+	$title = "Страница не найдена";
+	$page_content = include_template ('404.php', [
+	'categories' => $categories,
+	'errorMessage' => $errorMessage
+	]);
+
+	$layout_content = include_template('layout.php', [
+	'content' => $page_content,
+	'categories' => $categories,
+	'title' => $title,
+	'is_auth' => $is_auth,
+	'user_name' => $user_name
+	]);
+
+	die($layout_content);
 }
