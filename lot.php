@@ -6,15 +6,15 @@ require_once 'inc/data.php';
 $categories = get_categories($link);
 
 if (empty($_GET['id']) && !is_numeric($_GET['id'])){
-
-    render404($categories, $is_auth, $user_name);
+    $errorMessage = "Данной страницы не существует на сайте.";
+    render404($categories, $is_auth, $user_name, $errorMessage);
 }
 
 $lot = get_lot_by_id($link, (int)$_GET['id']);
 
 if (empty ($lot['id'])) {
-
-    render404($categories, $is_auth, $user_name);
+    $errorMessage = "Лот не найден.";
+    render404($categories, $is_auth, $user_name, $errorMessage);
 }
 
 $title = $lot['name'];

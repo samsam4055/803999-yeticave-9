@@ -26,10 +26,10 @@
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">
                 <span class="lot-item__amount">Текущая цена</span>
-                <span class="lot-item__cost"><?= format_price(esc($lot['price'])); ?></span>
+                <span class="lot-item__cost"><?= format_price($lot['price']); ?></span>
               </div>
               <div class="lot-item__min-cost">
-                Мин. ставка <span><?= format_price(esc($lot['new_price'])); ?> р</span>
+                Мин. ставка <span><?= format_price($lot['new_price']); ?> р</span>
               </div>
             </div>
             <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post" autocomplete="off">
