@@ -37,6 +37,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if(!is_date_valid($new_lot['lot-date'])) {
             $errors['lot-date'] = 'Укажите дату завершения торгов в формате ДД.ММ.ГГГГ';
         }
+		
+		if(!is_date_tomorrow($new_lot['lot-date'])) {
+            $errors['lot-date'] = 'Дата завершения торгов должна быть больше, чем текущая дата';
+        }
+		
     }
 	
 	if (count($errors)) {

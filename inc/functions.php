@@ -165,14 +165,24 @@ function render404($categories, $is_auth, $user_name, $error_message) {
 
 function check_positive_number($value) {
 	if(!filter_var($value, FILTER_VALIDATE_INT) || $value <= 0) {
-	return false;
+	    return false;
 	}
 	return true;
 }
 
 function is_date_valid(string $date) : bool {
-    $format_to_check = 'Y-m-d';
-    $dateTimeObj = date_create_from_format($format_to_check, $date);
+	$format_to_check = 'Y-m-d';
+	$dateTimeObj = date_create_from_format($format_to_check, $date);
 
-    return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
+	return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
+}
+
+function is_date_tomorrow(string $date) : bool {
+	$new_lot_date = strtotime($date);
+	$date_end = strtotime('tomorrow');
+
+	if($new_lot_date <= $date_end) {
+		return false;
+	}
+	return true;
 }
