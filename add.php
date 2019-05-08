@@ -42,6 +42,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors['lot-date'] = 'Дата завершения торгов должна быть больше, чем текущая дата';
         }
 		
+		if($_FILES['image']['name']) {
+        $tmp_name = $_FILES['image']['tmp_name'];
+        $path = $_FILES['image']['name'];
+        $file_type = mime_content_type($tmp_name);
+        
+		    if ($file_type !== "image/gif") {
+                $errors['image'] = 'Загрузите картинку лота в формате PNG или JPEG';
+            }
+        }
+		else {
+            $errors['image'] = 'Вы не загрузили изображение лота';
+        }
+	
     }
 	
 	if (count($errors)) {
