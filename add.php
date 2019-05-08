@@ -18,11 +18,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	$errors = [];
 
-	foreach ($required as $key) {
-		if (empty($_POST[$key])) {
+	foreach($new_lot as $key => $value) {
+        if(empty($new_lot[$key])) {
             $errors[$key] = 'Это поле надо заполнить';
-		}
-	}
+        }
+        if($key === 'category' && $value === 'Выберите категорию') {
+            $errors[$key] = 'Выберите категорию';
+        }
+		
+		if(!check_positive_number($new_lot['lot-rate'])) {
+            $errors['lot-rate'] = 'Введите число больше ноля';
+        }
+		
+		if(!check_positive_number($new_lot['lot-step'])) {
+            $errors['lot-step'] = 'Введите число больше ноля';
+        }
+		
+		if(!is_date_valid($new_lot['lot-date'])) {
+            $errors['lot-date'] = 'Укажите дату завершения торгов в формате ДД.ММ.ГГГГ';
+        }
+    }
+	
 	if (count($errors)) {
 
 	$page_content = include_template('add-lot.php', [
