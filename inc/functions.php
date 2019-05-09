@@ -116,7 +116,7 @@ function fetch_data($link, string $sql): array
 
 function get_categories($link): array
 {
-	$sql_cat = 'SELECT `code`, `name` FROM categories';
+	$sql_cat = 'SELECT `code`, `name`, `id` FROM categories';
 
 	return fetch_data($link, $sql_cat);
 }
@@ -163,6 +163,19 @@ function render404($categories, $is_auth, $user_name, $error_message) {
 	die($layout_content);
 }
 
+function get_category_id($link, $category) {
+	$rows_categories = get_categories($link);
+	
+	foreach($rows_categories as $row) {
+		if(isset($row['name'])) {
+			if($category === $row['name']) {
+				$category_id = $row['id'];
+			}
+		}
+	}
+	return $category_id;
+}
+
 function check_positive_number($value) {
 	if(!filter_var($value, FILTER_VALIDATE_INT) || $value <= 0) {
 	    return false;
@@ -187,11 +200,11 @@ function is_date_tomorrow(string $date) : bool {
 	return true;
 }
 
-function insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_end_at, $new_lot_step, $new_lot_price, $new_lot_category): array
+function insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_end_at, $new_lot_step, $new_lot_price, $new_lot_category_id): array
 {
 	$add_lot = "INSERT INTO lots
 	(name, description, img_url, start_price, end_at, rate_step, user_id, category_id) VALUES
-	('$new_lot_name', '$new_lot_message', '$file_url', '$new_lot_price', '$new_lot_end_at', '$new_lot_step', '1', '1')";
+	('$new_lot_name', '$new_lot_message', '$file_url', '$new_lot_price', '$new_lot_end_at', '$new_lot_step', '1', '$new_lot_category_id')";
 
 	return fetch_data($link, $add_lot);
 }

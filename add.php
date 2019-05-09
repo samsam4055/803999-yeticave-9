@@ -78,9 +78,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$new_lot_end_at = $new_lot['lot-date'];
 		$new_lot_step = $new_lot['lot-step'];
 		$new_lot_price = $new_lot['lot-rate'];
-		$new_lot_category = $new_lot['category'];
 		
-		insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_end_at, $new_lot_step, $new_lot_price, $new_lot_category);
+		$new_lot_category_id = get_category_id($link, $new_lot['category']);
+		
+		insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_end_at, $new_lot_step, $new_lot_price, $new_lot_category_id);
 
 	}
 	
