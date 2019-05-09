@@ -59,7 +59,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$errors['image'] = 'Вы не загрузили изображение лота';
 	}
 
-
+	if(!$errors) {
+		if($file_type === 'image/jpeg') {
+			$file_type = '.jpeg';
+		} elseif($file_type === 'image/png') {
+			$file_type = '.png';
+        }
+		
+		$file_name_unic = uniqid() . $file_type;
+		$file_url = 'uploads/' .$file_name_unic;
+		move_uploaded_file($tmp_name, $file_url);
+	}
+	
 	if (count($errors)) {
 
 	$page_content = include_template('add-lot.php', [
