@@ -30,19 +30,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	if(!check_positive_number($new_lot['lot-rate'])) {
 		$errors['lot-rate'] = 'Введите число больше ноля';
 	}
-	
+
 	if(!check_positive_number($new_lot['lot-step'])) {
 		$errors['lot-step'] = 'Введите число больше ноля';
 	}
-	
+
 	if(!is_date_valid($new_lot['lot-date'])) {
 		$errors['lot-date'] = 'Укажите дату завершения торгов в формате ДД.ММ.ГГГГ';
 	}
-	
+
 	if(!is_date_tomorrow($new_lot['lot-date'])) {
 		$errors['lot-date'] = 'Дата завершения торгов должна быть больше, чем текущая дата';
 	}
-	
+
 	if($_FILES['image']['name']) {
 	
 		$tmp_name = $_FILES['image']['tmp_name'];
@@ -50,18 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	
 		$finfo = finfo_open(FILEINFO_MIME_TYPE);
 		$file_type = finfo_file($finfo, $tmp_name);
-		var_dump ($file_type);
 		
-		if ($file_type !== "image/jpeg" || $file_type !== "image/png") {
+		if ($file_type !== "image/jpeg" && $file_type !== "image/png") {
 			$errors['image'] = 'Загрузите картинку лота в формате PNG или JPEG';
 		}
 	}
 	else {
 		$errors['image'] = 'Вы не загрузили изображение лота';
 	}
-	    
-	var_dump ($errors);
-	
+
+
 	if (count($errors)) {
 
 	$page_content = include_template('add-lot.php', [
