@@ -43,13 +43,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 		
 		if($_FILES['image']['name']) {
-        $tmp_name = $_FILES['image']['tmp_name'];
-        $path = $_FILES['image']['name'];
         
-		$finfo = finfo_open(FILEINFO_MIME_TYPE);
-		$file_type = finfo_file($finfo, $tmp_name);
+			$tmp_name = $_FILES['image']['tmp_name'];
+			$path = $_FILES['image']['name'];
         
-		    if ($file_type !== "image/jpeg" || $file_type !== "image/png") {
+			$finfo = finfo_open(FILEINFO_MIME_TYPE);
+			$file_type = finfo_file($finfo, $tmp_name);
+			var_dump ($file_type);
+		    
+			if ($file_type !== "image/jpeg" || $file_type !== "image/png") {
                 $errors['image'] = 'Загрузите картинку лота в формате PNG или JPEG';
             }
         }
@@ -59,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	
     }
 	var_dump ($errors);
+	
 	if (count($errors)) {
 
 	$page_content = include_template('add-lot.php', [
