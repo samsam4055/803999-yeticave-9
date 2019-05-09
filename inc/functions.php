@@ -143,7 +143,7 @@ function get_lot_by_id($link, int $lot_id): array
 	return count($result) === 1 ? $result[0] : [];
 }
 
-function render404($categories, $is_auth, $user_name, $error_message) { 
+function render404($categories, $is_auth, $user_name, $error_message) {
 
 	http_response_code(404);
 	$title = "Страница не найдена";
@@ -165,7 +165,7 @@ function render404($categories, $is_auth, $user_name, $error_message) {
 
 function get_category_id($link, $category) {
 	$rows_categories = get_categories($link);
-	
+
 	foreach($rows_categories as $row) {
 		if(isset($row['name'])) {
 			if($category === $row['name']) {
@@ -200,11 +200,18 @@ function is_date_tomorrow(string $date) : bool {
 	return true;
 }
 
-function insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_end_at, $new_lot_step, $new_lot_price, $new_lot_category_id): array
+function insert_data($link, string $sql)
+{
+	$stmt = db_get_prepare_stmt($link, $sql);
+
+	return mysqli_stmt_execute($stmt);
+}
+
+function insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_end_at, $new_lot_step, $new_lot_price, $new_lot_category_id)
 {
 	$add_lot = "INSERT INTO lots
 	(name, description, img_url, start_price, end_at, rate_step, user_id, category_id) VALUES
 	('$new_lot_name', '$new_lot_message', '$file_url', '$new_lot_price', '$new_lot_end_at', '$new_lot_step', '1', '$new_lot_category_id')";
 
-	return fetch_data($link, $add_lot);
+	return insert_data($link, $add_lot);
 }
