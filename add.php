@@ -8,13 +8,7 @@ $categories = get_categories($link);
 $title = "Добавление лота";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $new_lot = $_POST;
-
-	$required = ['category', 'lot-name', 'message', 'lot-rate', 'lot-step', 'lot-date'];
-
-	$dict = ['category' => 'категория', 'lot-name' => 'имя лота', 'message' => 'описание лота',
-	'lot-rate' => 'cтавка лота', 'lot-step' => 'шаг ставки', 'lot-date' => 'дата лота'
-	];
+  $new_lot = $_POST;
 
 	$errors = [];
 
@@ -48,8 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$tmp_name = $_FILES['image']['tmp_name'];
 		$path = $_FILES['image']['name'];
 
-		$finfo = finfo_open(FILEINFO_MIME_TYPE);
-		$file_type = finfo_file($finfo, $tmp_name);
+		$file_type = mime_content_type($tmp_name);
 
 		if ($file_type !== "image/jpeg" && $file_type !== "image/png") {
 			$errors['image'] = 'Загрузите картинку лота в формате PNG или JPEG';
@@ -82,7 +75,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		$new_lot_category_id = get_category_id($link, $new_lot['category']);
 
-		$lot_is_add = insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_end_at, $new_lot_step, $new_lot_price, $new_lot_category_id);
+		$lot_is_add = insert_lot($link, $new_lot_name,
+          $new_lot_message, $file_url, $new_lot_end_at, $new_lot_step,
+          $new_lot_price, $new_lot_category_id);
 
     if($lot_is_add) {
     $lot_id = mysqli_insert_id($link);
