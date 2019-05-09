@@ -1,3 +1,12 @@
+<?php
+$saved_name = $_POST['lot-name'] ?? '';
+$saved_category = $_POST['category'] ?? ''; // не вставляется (сбрасывается) категория
+$saved_message = $_POST['message'] ?? '';
+$saved_image = $_FILES['image']['name'] ?? ''; // не понятно как вставлять значение, если пользоваетель уже выбрал файл + куда выводить ошибку типа файла?
+$saved_start_price = $_POST['lot-rate'] ?? '';
+$saved_step = $_POST['lot-step'] ?? '';
+$saved_date = $_POST['lot-date'] ?? ''; // дата подходит только на 2 дня больше (а не на 1) ?? проблема с функцией
+?>
 <main>
     <nav class="nav">
       <ul class="nav__list container">
@@ -13,14 +22,14 @@
       <div class="form__container-two">
         <div class="form__item <?=isset($errors['lot-name']) ? "form__item--invalid" : "";?>">
           <label for="lot-name">Наименование <sup>*</sup></label>
-          <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота">
+          <input id="lot-name" type="text" name="lot-name" value="<?=htmlspecialchars($saved_name);?>" placeholder="Введите наименование лота" required>
           <span class="form__error"><?=$errors['lot-name'];?></span>
         </div>
         <?php $value = isset($user_lot['category']) ? $user_lot['category'] : "";?>
 		<div class="form__item <?=isset($errors['category']) ? "form__item--invalid" : "";?>">
           <label for="category">Категория <sup>*</sup></label>
-          <select id="category" name="category">
-            <option value="" selected'>Выберите категорию</option>
+          <select id="category" name="category" value="<?=htmlspecialchars($saved_category);?>" required>
+            <option value="" disabled selected style='display:none;'>Выберите категорию</option>
             <?php foreach ($categories as $category) : ?>
 			<option><?= esc($category['name']); ?></option>
             <?php endforeach; ?>
@@ -28,35 +37,35 @@
           <span class="form__error">Выберите категорию</span>
         </div>
       </div>
-         
+
 	  <div class="form__item form__item--wide <?=isset($errors['message']) ? "form__item--invalid" : "";?>">
         <label for="message">Описание <sup>*</sup></label>
-        <textarea id="message" name="message" placeholder="Напишите описание лота"></textarea>
+        <textarea id="message" name="message" placeholder="Напишите описание лота" required><?=htmlspecialchars($saved_message);?></textarea>
         <span class="form__error"><?=$errors['message'];?></span>
       </div>
       <div class="form__item form__item--file <?=isset($errors['image']) ? 'form__item--invalid' : '';?>">
         <label>Изображение <sup>*</sup></label>
-        <div class="form__input-file">
+        <div class="form__input-file <?=isset($errors['image']) ? 'form__item--invalid' : '';?>">
           <input class="visually-hidden" type="file" id="lot-img" name="image" value="">
           <label for="lot-img">
-            Добавить
+            <?=isset($errors['image']) ? 'Добавте файл' : 'Добавить';?>
           </label>
         </div>
       </div>
       <div class="form__container-three">
         <div class="form__item form__item--small <?=isset($errors['lot-rate']) ? 'form__item--invalid' : '';?>">
           <label for="lot-rate">Начальная цена <sup>*</sup></label>
-          <input id="lot-rate" type="text" name="lot-rate" placeholder="0">
+          <input id="lot-rate" type="text" name="lot-rate" value="<?=htmlspecialchars($saved_start_price);?>" placeholder="0" required>
           <span class="form__error"><?=$errors['lot-rate'];?></span>
         </div>
         <div class="form__item form__item--small <?=isset($errors['lot-step']) ? 'form__item--invalid' : '';?>">
           <label for="lot-step">Шаг ставки <sup>*</sup></label>
-          <input id="lot-step" type="text" name="lot-step" placeholder="0">
+          <input id="lot-step" type="text" name="lot-step" value="<?=htmlspecialchars($saved_step);?>" placeholder="0" required>
           <span class="form__error"><?=$errors['lot-step'];?></span>
         </div>
         <div class="form__item <?=isset($errors['lot-date']) ? 'form__item--invalid' : '';?>">
           <label for="lot-date">Дата окончания торгов <sup>*</sup></label>
-          <input class="form__input-date" id="lot-date" type="text" name="lot-date" placeholder="Введите дату в формате ГГГГ-ММ-ДД">
+          <input class="form__input-date" id="lot-date" type="text" name="lot-date"  value="<?=htmlspecialchars($saved_date);?>" placeholder="Введите дату в формате ГГГГ-ММ-ДД" required>
           <span class="form__error"><?=$errors['lot-date'];?></span>
         </div>
       </div>
