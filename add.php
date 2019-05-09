@@ -69,6 +69,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$file_name_unic = uniqid() . $file_type;
 		$file_url = 'uploads/' .$file_name_unic;
 		move_uploaded_file($tmp_name, $file_url);
+		
+		$new_lot['lot-name'] = htmlspecialchars($new_lot['lot-name']);
+		$new_lot['message'] = htmlspecialchars($new_lot['message']);
+		
+		$new_lot_name = $new_lot['lot-name'];
+		$new_lot_message = $new_lot['message'];
+		$new_lot_end_at = $new_lot['lot-date'];
+		$new_lot_step = $new_lot['lot-step'];
+		$new_lot_price = $new_lot['lot-rate'];
+		$new_lot_category = $new_lot['category'];
+		
+		insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_end_at, $new_lot_step, $new_lot_price, $new_lot_category);
+
 	}
 	
 	if (count($errors)) {
@@ -79,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     ]);
     }
 	else {
-		header('Location: lot.php?id=5'); //  . $lot_id  переадресация на страницу просмотра лота
+		header('Location: lot.php?id=5'); //  . $lot_id  переадресация на страницу просмотра лота, временно не подтягиваем id
 		die();
 	}
 }

@@ -186,3 +186,12 @@ function is_date_tomorrow(string $date) : bool {
 	}
 	return true;
 }
+
+function insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_end_at, $new_lot_step, $new_lot_price, $new_lot_category): array
+{
+	$add_lot = "INSERT INTO lots
+	(name, description, img_url, start_price, end_at, rate_step, user_id, category_id) VALUES
+	('$new_lot_name', '$new_lot_message', '$file_url', '$new_lot_price', '$new_lot_end_at', '$new_lot_step', '1', '1')";
+
+	return fetch_data($link, $add_lot);
+}
