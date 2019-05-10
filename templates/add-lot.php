@@ -2,7 +2,7 @@
 $saved_name = $_POST['lot-name'] ?? '';
 $saved_category = $_POST['category'] ?? '';
 $saved_message = $_POST['message'] ?? '';
-$saved_image = $_FILES['image']['name'] ?? ''; // не понятно как вставлять значение, если пользоваетель уже выбрал файл + куда выводить ошибку типа файла?
+$saved_image = $_FILES['image']['name'] ?? ''; // не понятно как вставлять значение, если пользоваетель уже выбрал файл
 $saved_start_price = $_POST['lot-rate'] ?? '';
 $saved_step = $_POST['lot-step'] ?? '';
 $saved_date = $_POST['lot-date'] ?? ''; // дата подходит только на 2 дня больше (а не на 1) ?? проблема с функцией
@@ -49,6 +49,7 @@ $saved_date = $_POST['lot-date'] ?? ''; // дата подходит тольк�
           <label for="lot-img">
             <?=isset($errors['image']) ? 'Добавте файл' : 'Добавить';?>
           </label>
+		  <span class="form__error"><?=isset($errors['image']) ? $errors['image'] : '';?></span>
         </div>
       </div>
       <div class="form__container-three">
