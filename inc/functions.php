@@ -194,7 +194,7 @@ function is_date_tomorrow(string $date) : bool {
 	$new_lot_date = strtotime($date);
 	$date_end = strtotime('tomorrow');
 
-	if($new_lot_date <= $date_end) {
+	if($new_lot_date < $date_end) {
 		return false;
 	}
 	return true;
