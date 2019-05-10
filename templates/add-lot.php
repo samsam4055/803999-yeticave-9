@@ -1,6 +1,6 @@
 <?php
 $saved_name = $_POST['lot-name'] ?? '';
-$saved_category = $_POST['category'] ?? ''; // не вставляется (сбрасывается) категория
+$saved_category = $_POST['category'] ?? '';
 $saved_message = $_POST['message'] ?? '';
 $saved_image = $_FILES['image']['name'] ?? ''; // не понятно как вставлять значение, если пользоваетель уже выбрал файл + куда выводить ошибку типа файла?
 $saved_start_price = $_POST['lot-rate'] ?? '';
@@ -25,13 +25,12 @@ $saved_date = $_POST['lot-date'] ?? ''; // дата подходит тольк�
           <input id="lot-name" type="text" name="lot-name" value="<?=htmlspecialchars($saved_name);?>" placeholder="Введите наименование лота" required>
           <span class="form__error"><?=$errors['lot-name'];?></span>
         </div>
-        <?php $value = isset($user_lot['category']) ? $user_lot['category'] : "";?>
 		<div class="form__item <?=isset($errors['category']) ? "form__item--invalid" : "";?>">
           <label for="category">Категория <sup>*</sup></label>
           <select id="category" name="category" value="<?=htmlspecialchars($saved_category);?>" required>
-            <option value="" disabled selected style='display:none;'>Выберите категорию</option>
+            <option value="" disabled <?=!isset($errors['category']) ? "selected" : "";?> style='display:none;'>Выберите категорию</option>
             <?php foreach ($categories as $category) : ?>
-			<option><?= esc($category['name']); ?></option>
+			<option <?php if ($category['name'] === $saved_category) echo "selected";?>><?= esc($category['name']); ?></option>
             <?php endforeach; ?>
           </select>
           <span class="form__error">Выберите категорию</span>
