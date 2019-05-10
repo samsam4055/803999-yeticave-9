@@ -48,12 +48,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	if($_FILES['image']['name']) {
 
 		$tmp_name = $_FILES['image']['tmp_name'];
-		$path = $_FILES['image']['name'];
+		
+		if (!empty($tmp_name)) {
 
-		$file_type = mime_content_type($tmp_name);
+			$file_type = mime_content_type($tmp_name);
 
-		if ($file_type !== "image/jpeg" && $file_type !== "image/png") {
-			$errors['image'] = 'Загрузите картинку лота в формате PNG или JPEG';
+			if ($file_type !== "image/jpeg" && $file_type !== "image/png") {
+				$errors['image'] = 'Загрузите картинку лота в формате PNG или JPEG';
+			}
+		}
+		else {
+			$errors['image'] = 'Загрузите картинку не более 2Мб в формате PNG или JPEG';
 		}
 	}
 	else {
