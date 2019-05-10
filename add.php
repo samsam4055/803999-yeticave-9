@@ -30,11 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 	
 	if(!check_positive_number($new_lot['lot-rate'])) {
-		$errors['lot-rate'] = 'Введите число больше ноля';
+		$errors['lot-rate'] = 'Введите целое число больше ноля';
 	}
 
 	if(!check_positive_number($new_lot['lot-step'])) {
-		$errors['lot-step'] = 'Введите число больше ноля';
+		$errors['lot-step'] = 'Введите целое число больше ноля';
 	}
 
 	if(!is_date_valid($new_lot['lot-date'])) {

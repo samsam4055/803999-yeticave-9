@@ -39,7 +39,7 @@ $saved_date = $_POST['lot-date'] ?? '';
 
 	  <div class="form__item form__item--wide <?=isset($errors['message']) ? "form__item--invalid" : "";?>">
         <label for="message">Описание <sup>*</sup></label>
-        <textarea id="message" name="message" placeholder="Напишите описание лота" required><?=htmlspecialchars($saved_message);?></textarea>
+        <textarea id="message" name="message" maxlength="1000" placeholder="Напишите описание лота" required><?=htmlspecialchars($saved_message);?></textarea>
         <span class="form__error"><?=$errors['message'];?></span>
       </div>
       <div class="form__item form__item--file <?=isset($errors['image']) ? 'form__item--invalid' : '';?>">
