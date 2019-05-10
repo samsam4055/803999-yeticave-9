@@ -21,12 +21,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 	}
 
-	if (!isset($errors['lot-name']) && (strlen($new_lot['lot-name']) > 128)) {
-		$errors['lot-name'] = 'Наименование больше допустимой длины в 128 символов';
+	if (!isset($errors['lot-name']) && (strlen($new_lot['lot-name']) > MAX_NAME_LENGTH)) {
+		$errors['lot-name'] = 'Наименование больше допустимых 128 символов';
 	}
 	
-	if (!isset($errors['message']) && (strlen($new_lot['message']) > 512)) {
-		$errors['message'] = 'Описание больше допустимой длины в 512 символов';
+	if (!isset($errors['message']) && (strlen($new_lot['message']) > MAX_DESC_LENGTH)) {
+		$errors['message'] = 'Описание больше допустимых 512 символов';
 	}
 	
 	if(!check_positive_number($new_lot['lot-rate'])) {
