@@ -2,7 +2,7 @@
 $saved_name = $_POST['lot-name'] ?? '';
 $saved_category = $_POST['category'] ?? '';
 $saved_message = $_POST['message'] ?? '';
-$saved_image = $_FILES['image']['name'] ?? ''; // не понятно как вставлять значение, если пользоваетель уже выбрал файл
+$saved_image = $_FILES['image']['name'] ?? '';
 $saved_start_price = $_POST['lot-rate'] ?? '';
 $saved_step = $_POST['lot-step'] ?? '';
 $saved_date = $_POST['lot-date'] ?? '';
@@ -22,12 +22,12 @@ $saved_date = $_POST['lot-date'] ?? '';
       <div class="form__container-two">
         <div class="form__item <?=isset($errors['lot-name']) ? "form__item--invalid" : "";?>">
           <label for="lot-name">Наименование <sup>*</sup></label>
-          <input id="lot-name" type="text" name="lot-name" value="<?=htmlspecialchars($saved_name);?>" placeholder="Введите наименование лота" required>
+          <input id="lot-name" type="text" name="lot-name" value="<?=htmlspecialchars($saved_name);?>" placeholder="Введите наименование лота">
           <span class="form__error"><?=$errors['lot-name'];?></span>
         </div>
 		<div class="form__item <?=isset($errors['category']) ? "form__item--invalid" : "";?>">
           <label for="category">Категория <sup>*</sup></label>
-          <select id="category" name="category" value="<?=htmlspecialchars($saved_category);?>" required>
+          <select id="category" name="category" value="<?=htmlspecialchars($saved_category);?>" >
             <option value="" disabled <?=!isset($errors['category']) ? "selected" : "";?> style='display:none;'>Выберите категорию</option>
             <?php foreach ($categories as $category) : ?>
 			<option <?php if ($category['name'] === $saved_category) echo "selected";?>><?= esc($category['name']); ?></option>
@@ -39,7 +39,7 @@ $saved_date = $_POST['lot-date'] ?? '';
 
 	  <div class="form__item form__item--wide <?=isset($errors['message']) ? "form__item--invalid" : "";?>">
         <label for="message">Описание <sup>*</sup></label>
-        <textarea id="message" name="message" maxlength="1000" placeholder="Напишите описание лота" required><?=htmlspecialchars($saved_message);?></textarea>
+        <textarea id="message" name="message" maxlength="1000" placeholder="Напишите описание лота"><?=htmlspecialchars($saved_message);?></textarea>
         <span class="form__error"><?=$errors['message'];?></span>
       </div>
       <div class="form__item form__item--file <?=isset($errors['image']) ? 'form__item--invalid' : '';?>">
@@ -55,12 +55,12 @@ $saved_date = $_POST['lot-date'] ?? '';
       <div class="form__container-three">
         <div class="form__item form__item--small <?=isset($errors['lot-rate']) ? 'form__item--invalid' : '';?>">
           <label for="lot-rate">Начальная цена <sup>*</sup></label>
-          <input id="lot-rate" type="text" name="lot-rate" value="<?=htmlspecialchars($saved_start_price);?>" placeholder="0" required>
+          <input id="lot-rate" type="text" name="lot-rate" value="<?=htmlspecialchars($saved_start_price);?>" placeholder="0">
           <span class="form__error"><?=$errors['lot-rate'];?></span>
         </div>
         <div class="form__item form__item--small <?=isset($errors['lot-step']) ? 'form__item--invalid' : '';?>">
           <label for="lot-step">Шаг ставки <sup>*</sup></label>
-          <input id="lot-step" type="text" name="lot-step" value="<?=htmlspecialchars($saved_step);?>" placeholder="0" required>
+          <input id="lot-step" type="text" name="lot-step" value="<?=htmlspecialchars($saved_step);?>" placeholder="0">
           <span class="form__error"><?=$errors['lot-step'];?></span>
         </div>
         <div class="form__item <?=isset($errors['lot-date']) ? 'form__item--invalid' : '';?>">

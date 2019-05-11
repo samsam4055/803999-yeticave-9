@@ -7,7 +7,7 @@ $categories = get_categories($link);
 
 $title = "Добавление лота";
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $new_lot = $_POST;
 
 	$errors = [];
@@ -30,11 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 	
 	if(!check_positive_number($new_lot['lot-rate'])) {
-		$errors['lot-rate'] = 'Введите целое число больше ноля';
+		$errors['lot-rate'] = 'Введите целое число больше 0';
 	}
 
 	if(!check_positive_number($new_lot['lot-step'])) {
-		$errors['lot-step'] = 'Введите целое число больше ноля';
+		$errors['lot-step'] = 'Введите целое число больше 0';
 	}
 
 	if(!is_date_valid($new_lot['lot-date'])) {
