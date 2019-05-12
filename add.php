@@ -13,11 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$errors = [];
 
 	foreach($new_lot as $key => $value) {
-        if(empty($new_lot[$key])) {
+        if(empty($value)) {
             $errors[$key] = 'Это поле надо заполнить';
-        }
-        if($key === 'category' && $value === 'Выберите категорию') {
-            $errors[$key] = 'Выберите категорию';
         }
 	}
 
@@ -29,11 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$errors['message'] = 'Описание больше допустимых ' . MAX_DESC_LENGTH . ' символов';
 	}
 	
-	if(!check_positive_number($new_lot['lot-rate'])) {
+	if(!is_positive_number($new_lot['lot-rate'])) {
 		$errors['lot-rate'] = 'Введите целое число больше 0';
 	}
 
-	if(!check_positive_number($new_lot['lot-step'])) {
+	if(!is_positive_number($new_lot['lot-step'])) {
 		$errors['lot-step'] = 'Введите целое число больше 0';
 	}
 
@@ -41,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$errors['lot-date'] = 'Укажите дату завершения торгов в формате ГГГГ.ММ.ДД';
 	}
 
-	if(!is_date_tomorrow($new_lot['lot-date'])) {
+	if(!is_date_from_future($new_lot['lot-date'])) {
 		$errors['lot-date'] = 'Дата завершения торгов должна быть больше, чем текущая дата';
 	}
 
@@ -69,9 +66,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		if($file_type === 'image/jpeg') {
 			$file_type = '.jpeg';
 		}
-    elseif($file_type === 'image/png') {
-			$file_type = '.png';
-    }
+		elseif($file_type === 'image/png') {
+		$file_type = '.png';
+		}
 
 		$file_name_unic = uniqid() . $file_type;
 		$file_url = 'uploads/' .$file_name_unic;
@@ -86,17 +83,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$new_lot_step = $new_lot['lot-step'];
 		$new_lot_price = $new_lot['lot-rate'];
 
-		$new_lot_category_id = get_category_id($link, $new_lot['category']);
+		$new_lot_category_id = $new_lot['category'];
 
-		$lot_is_add = insert_lot($link, $new_lot_name,
-          $new_lot_message, $file_url, $new_lot_end_at, $new_lot_step,
-          $new_lot_price, $new_lot_category_id);
+		$new_lot_id = insert_lot($link, $new_lot_name,
+			$new_lot_message, $file_url, $new_lot_end_at, $new_lot_step,
+			$new_lot_price, $new_lot_category_id);
 
-    if($lot_is_add) {
-    $lot_id = mysqli_insert_id($link);
-    header('Location: lot.php?id='. $lot_id);
-		die();
-    }
+		if($new_lot_id) {
+
+		header('Location: lot.php?id='. $new_lot_id);
+			die();
+		}
 	}
 
 	if (count($errors)) {
@@ -105,8 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     'categories' => $categories,
     'errors' => $errors
     ]);
-  }
-
+	}
 }
 
 else {
@@ -116,11 +112,11 @@ $page_content = include_template('add-lot.php', [
 }
 
 $layout_content = include_template('layout.php', [
-    'content' => $page_content,
-    'categories' => $categories,
-    'title' => $title,
-    'is_auth' => $is_auth,
-    'user_name' => $user_name
-    ]);
+	'content' => $page_content,
+	'categories' => $categories,
+	'title' => $title,
+	'is_auth' => $is_auth,
+	'user_name' => $user_name
+	]);
 
 print($layout_content);

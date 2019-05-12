@@ -54,7 +54,8 @@ function add_time_class(string $end_at): string
     return $hours <= 0 ? 'timer--finishing' : '';
 }
 
-function db_get_prepare_stmt($link, $sql, $data = []) {
+function db_get_prepare_stmt($link, $sql, $data = [])
+{
     $stmt = mysqli_prepare($link, $sql);
 
     if ($stmt === false) {
@@ -143,7 +144,8 @@ function get_lot_by_id($link, int $lot_id): array
 	return count($result) === 1 ? $result[0] : [];
 }
 
-function render404($categories, $is_auth, $user_name, $error_message) {
+function render404($categories, $is_auth, $user_name, $error_message)
+{
 
 	http_response_code(404);
 	$title = "Страница не найдена";
@@ -163,34 +165,24 @@ function render404($categories, $is_auth, $user_name, $error_message) {
 	die($layout_content);
 }
 
-function get_category_id($link, $category) {
-	$rows_categories = get_categories($link);
-
-	foreach($rows_categories as $row) {
-		if(isset($row['name'])) {
-			if($category === $row['name']) {
-				$category_id = $row['id'];
-			}
-		}
-	}
-	return $category_id;
-}
-
-function check_positive_number($value) {
+function is_positive_number($value)
+{
 	if(!filter_var($value, FILTER_VALIDATE_INT) || $value <= 0) {
 	    return false;
 	}
 	return true;
 }
 
-function is_date_valid(string $date) : bool {
+function is_date_valid(string $date): bool
+{
 	$format_to_check = 'Y-m-d';
 	$dateTimeObj = date_create_from_format($format_to_check, $date);
 
 	return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
 }
 
-function is_date_tomorrow(string $date) : bool {
+function is_date_from_future(string $date): bool
+{
 	$new_lot_date = strtotime($date);
 	$date_end = strtotime('tomorrow');
 
@@ -200,18 +192,27 @@ function is_date_tomorrow(string $date) : bool {
 	return true;
 }
 
-function insert_data($link, string $sql)
+function insert_data($link, string $sql): int
 {
 	$stmt = db_get_prepare_stmt($link, $sql);
-
-	return mysqli_stmt_execute($stmt);
+	$result = mysqli_stmt_execute($stmt);
+	
+	if (!$result) {
+		die ("Не удалось добавить данные в базу");
+	}
+	return mysqli_insert_id($link);
 }
 
-function insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_end_at, $new_lot_step, $new_lot_price, $new_lot_category_id)
+function insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_end_at, $new_lot_step, $new_lot_price, $new_lot_category_id): int
 {
 	$add_lot = "INSERT INTO lots
 	(name, description, img_url, start_price, end_at, rate_step, user_id, category_id) VALUES
 	('$new_lot_name', '$new_lot_message', '$file_url', '$new_lot_price', '$new_lot_end_at', '$new_lot_step', '1', '$new_lot_category_id')";
-
-	return insert_data($link, $add_lot);
+	
+	$lot_id = insert_data($link, $add_lot);
+	
+	if (empty($lot_id)) {
+		die ("Не удалось добавить или найти добавленый лот");
+	}
+	return $lot_id;
 }

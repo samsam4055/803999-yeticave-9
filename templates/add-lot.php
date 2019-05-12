@@ -27,10 +27,10 @@ $saved_date = $_POST['lot-date'] ?? '';
         </div>
 		<div class="form__item <?=isset($errors['category']) ? "form__item--invalid" : "";?>">
           <label for="category">Категория <sup>*</sup></label>
-          <select id="category" name="category" value="<?=htmlspecialchars($saved_category);?>" >
-            <option value="" disabled <?=!isset($errors['category']) ? "selected" : "";?> style='display:none;'>Выберите категорию</option>
+          <select id="category" name="category" >
+            <option value="" <?=!isset($errors['category']) ? "selected" : "";?>>Выберите категорию</option>
             <?php foreach ($categories as $category) : ?>
-			<option <?php if ($category['name'] === $saved_category) echo "selected";?>><?= esc($category['name']); ?></option>
+			<option value="<?=$category['id'];?>" <?php if ($category['id'] == $saved_category) echo "selected";?>><?= esc($category['name']); ?></option>
             <?php endforeach; ?>
           </select>
           <span class="form__error">Выберите категорию</span>
