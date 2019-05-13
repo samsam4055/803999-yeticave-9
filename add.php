@@ -17,6 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[$key] = 'Это поле надо заполнить';
         }
 	}
+	
+	if($new_lot['category'] <= 0 ) {
+		$errors['category'] = 'Выберите категорию';
+	}
 
 	if (!isset($errors['lot-name']) && (strlen($new_lot['lot-name']) > MAX_NAME_LENGTH)) {
 		$errors['lot-name'] = 'Наименование больше допустимых ' . MAX_NAME_LENGTH . ' символов';

@@ -200,7 +200,12 @@ function insert_data($link, string $sql): int
 	if (!$result) {
 		die ("Не удалось добавить данные в базу");
 	}
-	return mysqli_insert_id($link);
+	$received_id = mysqli_insert_id($link);
+	
+	if ($received_id <= 0 ) {
+		die ("Не удалось получить id");
+	}
+	return $received_id;
 }
 
 function insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_end_at, $new_lot_step, $new_lot_price, $new_lot_category_id): int
@@ -210,9 +215,6 @@ function insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_
 	('$new_lot_name', '$new_lot_message', '$file_url', '$new_lot_price', '$new_lot_end_at', '$new_lot_step', '1', '$new_lot_category_id')";
 	
 	$lot_id = insert_data($link, $add_lot);
-	
-	if (empty($lot_id)) {
-		die ("Не удалось добавить или найти добавленый лот");
-	}
+
 	return $lot_id;
 }
