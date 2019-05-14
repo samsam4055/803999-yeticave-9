@@ -54,7 +54,8 @@ function add_time_class(string $end_at): string
     return $hours <= 0 ? 'timer--finishing' : '';
 }
 
-function db_get_prepare_stmt($link, $sql, $data = []) {
+function db_get_prepare_stmt($link, $sql, $data = [])
+{
     $stmt = mysqli_prepare($link, $sql);
 
     if ($stmt === false) {
@@ -116,7 +117,7 @@ function fetch_data($link, string $sql): array
 
 function get_categories($link): array
 {
-	$sql_cat = 'SELECT `code`, `name` FROM categories';
+	$sql_cat = 'SELECT `code`, `name`, `id` FROM categories';
 
 	return fetch_data($link, $sql_cat);
 }
@@ -143,13 +144,14 @@ function get_lot_by_id($link, int $lot_id): array
 	return count($result) === 1 ? $result[0] : [];
 }
 
-function render404($categories, $is_auth, $user_name, $errorMessage) { 
+function render404($categories, $is_auth, $user_name, $error_message)
+{
 
 	http_response_code(404);
 	$title = "Страница не найдена";
 	$page_content = include_template ('404.php', [
 	'categories' => $categories,
-	'errorMessage' => $errorMessage
+	'error_message' => $error_message
 	]);
 
 	$layout_content = include_template('layout.php', [
@@ -161,4 +163,58 @@ function render404($categories, $is_auth, $user_name, $errorMessage) {
 	]);
 
 	die($layout_content);
+}
+
+function is_positive_number($value)
+{
+	if(!filter_var($value, FILTER_VALIDATE_INT) || $value <= 0) {
+	    return false;
+	}
+	return true;
+}
+
+function is_date_valid(string $date): bool
+{
+	$format_to_check = 'Y-m-d';
+	$dateTimeObj = date_create_from_format($format_to_check, $date);
+
+	return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
+}
+
+function is_date_from_future(string $date): bool
+{
+	$new_lot_date = strtotime($date);
+	$date_end = strtotime('tomorrow');
+
+	if($new_lot_date < $date_end) {
+		return false;
+	}
+	return true;
+}
+
+function insert_data($link, string $sql): int
+{
+	$stmt = db_get_prepare_stmt($link, $sql);
+	$result = mysqli_stmt_execute($stmt);
+	
+	if (!$result) {
+		die ("Не удалось добавить данные в базу");
+	}
+	$received_id = mysqli_insert_id($link);
+	
+	if ($received_id <= 0 ) {
+		die ("Не удалось получить id");
+	}
+	return $received_id;
+}
+
+function insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_end_at, $new_lot_step, $new_lot_price, $new_lot_category_id): int
+{
+	$add_lot = "INSERT INTO lots
+	(name, description, img_url, start_price, end_at, rate_step, user_id, category_id) VALUES
+	('$new_lot_name', '$new_lot_message', '$file_url', '$new_lot_price', '$new_lot_end_at', '$new_lot_step', '1', '$new_lot_category_id')";
+	
+	$lot_id = insert_data($link, $add_lot);
+
+	return $lot_id;
 }
