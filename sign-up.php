@@ -18,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 	}
 	
-	
 	if(!$errors) {
 		
 	header('Location: login.php');
