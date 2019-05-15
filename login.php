@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		else {
 			$_SESSION['user'] = $user;
 			header('Location: index.php');
-			die();
+			// var_dump ($_SESSION['user']); die ();
 		}
 	}
 
