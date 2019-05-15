@@ -22,12 +22,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$errors['category'] = 'Выберите категорию';
 	}
 
-	if (!isset($errors['lot-name']) && (strlen($new_lot['lot-name']) > MAX_NAME_LENGTH)) {
-		$errors['lot-name'] = 'Наименование больше допустимых ' . MAX_NAME_LENGTH . ' символов';
+	if (!isset($errors['lot-name']) && (strlen($new_lot['lot-name']) > MAX_LOT_NAME_LENGTH)) {
+		$errors['lot-name'] = 'Наименование больше допустимых ' . MAX_LOT_NAME_LENGTH . ' символов';
 	}
 	
-	if (!isset($errors['message']) && (strlen($new_lot['message']) > MAX_DESC_LENGTH)) {
-		$errors['message'] = 'Описание больше допустимых ' . MAX_DESC_LENGTH . ' символов';
+	if (!isset($errors['message']) && (strlen($new_lot['message']) > MAX_LOT_DESC_LENGTH)) {
+		$errors['message'] = 'Описание больше допустимых ' . MAX_LOT_DESC_LENGTH . ' символов';
 	}
 	
 	if(!is_positive_number($new_lot['lot-rate'])) {

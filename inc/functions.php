@@ -203,7 +203,7 @@ function insert_data($link, string $sql): int
 	$received_id = mysqli_insert_id($link);
 	
 	if ($received_id <= 0 ) {
-		die ("Не удалось получить id");
+		die ("Не удалось получить id записи");
 	}
 	return $received_id;
 }
@@ -217,4 +217,25 @@ function insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_
 	$lot_id = insert_data($link, $add_lot);
 
 	return $lot_id;
+}
+
+function is_registered_email($link, string $email): bool
+{
+	$sql_email = "SELECT id FROM users WHERE email = '$email'";
+	$verifiable_email = fetch_data($link, $sql_email);
+
+	if($verifiable_email) {
+		return true;
+	}
+	return false;
+}
+
+function insert_user($link, $new_user_name, $new_user_message, $new_user_password, $new_user_email): int
+{
+	$add_user = "INSERT INTO users (email, name, password, contact) 
+	VALUES ('$new_user_email', '$new_user_name', '$new_user_password', '$new_user_message')";
+	
+	$user_id = insert_data($link, $add_user);
+
+	return $user_id;
 }
