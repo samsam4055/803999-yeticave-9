@@ -35,10 +35,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 
 	if(!$errors) {
-		
-	header('Location: login.php');
-	die();
-	
+
+		$new_user_name = htmlspecialchars($new_user['name']);
+		$new_user_message = htmlspecialchars($new_user['message']);
+		$new_user_password = password_hash($new_user['password'], PASSWORD_DEFAULT);
+		$new_user_email = htmlspecialchars($new_user['email']);
+
+		$new_user_id = insert_user($link, $new_user_name, $new_user_message, $new_user_password, $new_user_email);
+
+		if($new_user_id) {
+			
+			header('Location: login.php');
+			die();
+		}
 	}
 
 	if (count($errors)) {
