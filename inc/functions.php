@@ -218,3 +218,14 @@ function insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_
 
 	return $lot_id;
 }
+
+function is_registered_email($link, string $email): bool
+{
+	$sql_email = "SELECT id FROM users WHERE email = '$email'";
+	$verifiable_email = fetch_data($link, $sql_email);
+
+	if($verifiable_email) {
+		return true;
+	}
+	return false;
+}

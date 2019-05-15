@@ -5,8 +5,10 @@ $user_name = 'Andrii Smerechynskyi';
 date_default_timezone_set("Europe/Moscow");
 setlocale(LC_ALL, 'ru_RU');
 
-define('MAX_NAME_LENGTH', '128'); 
-define('MAX_DESC_LENGTH', '512'); 
+define('MAX_LOT_NAME_LENGTH', '128');
+define('MAX_LOT_DESC_LENGTH', '512');
+define('MAX_USER_NAME_LENGTH', '64');
+define('MAX_USER_CONTACT_LENGTH', '128');
 
 $db = [
   "host" => "localhost",
