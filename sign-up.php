@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$errors['email'] = 'Введите корректный e-mail';
 	}
 
-	if(is_registered_email($link, $new_user['email'])) {
+	if(!isset($errors['email']) && is_registered_email($link, $new_user['email'])) {
 		$errors['email'] = 'Пользователь с этим e-mail уже зарегистрирован';
 	}
 
