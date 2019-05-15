@@ -167,7 +167,7 @@ function render404($categories, $is_auth, $user_name, $error_message)
 function render403($categories, $is_auth, $user_name, $error_message)
 {
 	http_response_code(403);
-	$title = "Страница не найдена";
+	$title = "Доступ запрещен";
 	$page_content = include_template ('403.php', [
 	'categories' => $categories,
 	'error_message' => $error_message
