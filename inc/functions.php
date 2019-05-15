@@ -239,3 +239,10 @@ function insert_user($link, $new_user_name, $new_user_message, $new_user_passwor
 
 	return $user_id;
 }
+
+function get_user_by_email($link, $user_email): array
+{
+	$sql_user_by_email = "SELECT * FROM users WHERE email = '$user_email'";
+	$result = fetch_data($link, $sql_user_by_email);
+	return count($result) === 1 ? $result[0] : [];
+}
