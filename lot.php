@@ -21,6 +21,7 @@ $title = $lot['name'];
 $page_content = include_template('lot.php', [
     'lot' => $lot,
     'categories' => $categories,
+    'is_auth' => $is_auth,
     ]);
 
 $layout_content = include_template('layout.php', [

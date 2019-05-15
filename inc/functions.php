@@ -146,10 +146,29 @@ function get_lot_by_id($link, int $lot_id): array
 
 function render404($categories, $is_auth, $user_name, $error_message)
 {
-
 	http_response_code(404);
 	$title = "Страница не найдена";
 	$page_content = include_template ('404.php', [
+	'categories' => $categories,
+	'error_message' => $error_message
+	]);
+
+	$layout_content = include_template('layout.php', [
+	'content' => $page_content,
+	'categories' => $categories,
+	'title' => $title,
+	'is_auth' => $is_auth,
+	'user_name' => $user_name
+	]);
+
+	die($layout_content);
+}
+
+function render403($categories, $is_auth, $user_name, $error_message)
+{
+	http_response_code(403);
+	$title = "Страница не найдена";
+	$page_content = include_template ('403.php', [
 	'categories' => $categories,
 	'error_message' => $error_message
 	]);
@@ -196,12 +215,12 @@ function insert_data($link, string $sql): int
 {
 	$stmt = db_get_prepare_stmt($link, $sql);
 	$result = mysqli_stmt_execute($stmt);
-	
+
 	if (!$result) {
 		die ("Не удалось добавить данные в базу");
 	}
 	$received_id = mysqli_insert_id($link);
-	
+
 	if ($received_id <= 0 ) {
 		die ("Не удалось получить id записи");
 	}
@@ -213,7 +232,7 @@ function insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_
 	$add_lot = "INSERT INTO lots
 	(name, description, img_url, start_price, end_at, rate_step, user_id, category_id) VALUES
 	('$new_lot_name', '$new_lot_message', '$file_url', '$new_lot_price', '$new_lot_end_at', '$new_lot_step', '1', '$new_lot_category_id')";
-	
+
 	$lot_id = insert_data($link, $add_lot);
 
 	return $lot_id;
@@ -232,9 +251,9 @@ function is_registered_email($link, string $email): bool
 
 function insert_user($link, $new_user_name, $new_user_message, $new_user_password, $new_user_email): int
 {
-	$add_user = "INSERT INTO users (email, name, password, contact) 
+	$add_user = "INSERT INTO users (email, name, password, contact)
 	VALUES ('$new_user_email', '$new_user_name', '$new_user_password', '$new_user_message')";
-	
+
 	$user_id = insert_data($link, $add_user);
 
 	return $user_id;

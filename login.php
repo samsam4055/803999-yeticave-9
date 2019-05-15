@@ -20,10 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 	if (filter_var($login_form['email'], FILTER_VALIDATE_EMAIL) === false ) {
 		$errors['email'] = 'Введите корректный e-mail';
-	} 
+	}
 	else {
         $user_email = htmlspecialchars($login_form['email']);
-		
+
         $user = get_user_by_email($link, $user_email);
 
         if (!$user) {
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		else {
 			$_SESSION['user'] = $user;
 			header('Location: index.php');
-			// var_dump ($_SESSION['user']); die ();
+			die ();
 		}
 	}
 
