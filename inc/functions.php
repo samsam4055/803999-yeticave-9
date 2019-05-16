@@ -343,3 +343,15 @@ function show_user_frendly_time($time) {
 	$time = date('H:i', strtotime($time));
 	return $date . ' ' . $time;
 }
+
+function get_lot_rates($link, $lot_id_rates): array
+{
+	$sql_lot_rates = "SELECT rates.amount, rates.created_at, users.name
+		FROM rates
+		JOIN lots ON lots.id = rates.lot_id
+		JOIN users ON users.id = rates.lot_id
+		WHERE rates.lot_id = '$lot_id_rates'
+		ORDER BY rates.created_at DESC";
+	
+	return fetch_data($link, $sql_lot_rates);
+}

@@ -18,10 +18,14 @@ if (empty ($lot)) {
 }
 
 $title = $lot['name'];
+
+$history_rates = get_lot_rates($link, $lot['id']);
+
 $page_content = include_template('lot.php', [
     'lot' => $lot,
     'categories' => $categories,
     'is_auth' => $is_auth,
+	'history_rates' => $history_rates
     ]);
 
 $layout_content = include_template('layout.php', [
