@@ -227,11 +227,11 @@ function insert_data($link, string $sql): int
 	return $received_id;
 }
 
-function insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_end_at, $new_lot_step, $new_lot_price, $new_lot_category_id): int
+function insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_end_at, $new_lot_step, $new_lot_price, $new_lot_user_id, $new_lot_category_id): int
 {
 	$add_lot = "INSERT INTO lots
 	(name, description, img_url, start_price, end_at, rate_step, user_id, category_id) VALUES
-	('$new_lot_name', '$new_lot_message', '$file_url', '$new_lot_price', '$new_lot_end_at', '$new_lot_step', '1', '$new_lot_category_id')";
+	('$new_lot_name', '$new_lot_message', '$file_url', '$new_lot_price', '$new_lot_end_at', '$new_lot_step', '$new_lot_user_id', '$new_lot_category_id')";
 
 	$lot_id = insert_data($link, $add_lot);
 
