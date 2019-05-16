@@ -5,6 +5,24 @@ require_once 'inc/data.php';
 
 $categories = get_categories($link);
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+	
+	if (!$is_auth) {
+    $error_message = "Делать ставки могут только авторизированные пользователи";
+    render403($categories, $is_auth, $user_name, $error_message);
+	}
+	
+	$new_rate = $_POST;
+
+	$errors = [];
+
+	
+	
+	header('Location: my-bets.php');
+			die();
+}
+
+
 if (empty($_GET['id']) || !is_numeric($_GET['id'])){
     $error_message = "Данной страницы не существует на сайте.";
     render404($categories, $is_auth, $user_name, $error_message);
@@ -18,6 +36,8 @@ if (empty ($lot)) {
 }
 
 $title = $lot['name'];
+
+
 
 $history_rates = get_lot_rates($link, $lot['id']);
 

@@ -13,7 +13,7 @@ if (!$is_auth) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $new_lot = $_POST;
+	$new_lot = $_POST;
 
 	$errors = [];
 
