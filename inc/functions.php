@@ -265,3 +265,35 @@ function get_user_by_email($link, $user_email): array
 	$result = fetch_data($link, $sql_user_by_email);
 	return count($result) === 1 ? $result[0] : [];
 }
+
+function get_user_rates($link, $user_id_rates): array
+{
+	$sql_user_rates = "SELECT rates.amount, lots.id, lots.img_url, lots.name, categories.name AS category,
+		lots.end_at AS time, rates.created_at, lots.winner_id
+		FROM rates
+		JOIN lots ON lots.id = rates.lot_id
+		JOIN categories ON categories.id = lots.category_id
+		WHERE rates.user_id = '$user_id_rates'
+		ORDER BY rates.created_at DESC";
+	
+	return fetch_data($link, $sql_user_rates);
+}
+
+function render_error_page($categories, $is_auth, $user_name, $error_message)
+{
+	$title = "Данные не найдены";
+	$page_content = include_template ('error-page.php', [
+	'categories' => $categories,
+	'error_message' => $error_message
+	]);
+
+	$layout_content = include_template('layout.php', [
+	'content' => $page_content,
+	'categories' => $categories,
+	'title' => $title,
+	'is_auth' => $is_auth,
+	'user_name' => $user_name
+	]);
+
+	die($layout_content);
+}
