@@ -269,9 +269,10 @@ function get_user_by_email($link, $user_email): array
 function get_user_rates($link, $user_id_rates): array
 {
 	$sql_user_rates = "SELECT rates.amount, lots.id, lots.img_url, lots.name, categories.name AS category,
-		lots.end_at AS time, rates.created_at, lots.winner_id
+		lots.end_at AS time, rates.created_at, lots.winner_id, users.contact
 		FROM rates
 		JOIN lots ON lots.id = rates.lot_id
+		JOIN users ON users.id = lots.user_id
 		JOIN categories ON categories.id = lots.category_id
 		WHERE rates.user_id = '$user_id_rates'
 		ORDER BY rates.created_at DESC";
@@ -296,4 +297,49 @@ function render_error_page($categories, $is_auth, $user_name, $error_message)
 	]);
 
 	die($layout_content);
+}
+
+function get_noun_plural_form (int $number, string $one, string $two, string $many): string
+{
+	$number = (int) $number;
+	$mod10 = $number % 10;
+	$mod100 = $number % 100;
+
+	switch (true) {
+		case ($mod100 >= 11 && $mod100 <= 20):
+			return $many;
+
+		case ($mod10 > 5):
+			return $many;
+
+		case ($mod10 === 1):
+			return $one;
+
+		case ($mod10 >= 2 && $mod10 <= 4):
+			return $two;
+
+		default:
+			return $many;
+	}
+}
+
+function show_user_frendly_time($time) {
+	$current_time = time();
+	$time_lives_a_lot = strtotime($time);
+	$time_lives_a_lot = $current_time - $time_lives_a_lot;
+	$hours = floor($time_lives_a_lot / 3600);
+	$minutes = floor($time_lives_a_lot % 3600 / 60);
+
+	if($hours == 0) {
+		$noun_plural_form_minutes = get_noun_plural_form ($minutes, " минуту назад", " минуты назад", " минут назад");
+		$time = $minutes . $noun_plural_form_minutes;
+		return $time;
+	} elseif($hours > 0 && $hours < 24) {
+		$noun_plural_form_hours = get_noun_plural_form ($hours, " час назад", " часа назад", " часов назад");
+		$time = $hours . $noun_plural_form_hours;
+		return $time;
+	}
+	$date = date('d.m.Y', strtotime($time));
+	$time = date('H:i', strtotime($time));
+	return $date . ' ' . $time;
 }
