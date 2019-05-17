@@ -13,15 +13,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 	
 	$new_rate = $_POST;
-
 	$errors = [];
+	$lot = get_lot_by_id($link, (int)$new_rate['id']);
+	
+	if($new_rate['cost'] < $lot['new_price'] ) {
+		$errors['cost'] = 'Минимальная ставка ' . $lot['new_price'] . ' р';
+	}
+	
+	if(!$errors) {
+		
+		$user_id_rate = $_SESSION['user']['id'];
+		$lot_id_rate = $lot['id'];
+		$amount_rate = $new_rate['cost'];
 
-	
-	
-	header('Location: my-bets.php');
+		$new_rate = insert_rate($link, $amount_rate, $user_id_rate, $lot_id_rate);
+		
+		if (!$new_rate){
+			die ("Не удалось добавить ставку, попробуйте позже");	
+		}
+		
+		header('Location: my-bets.php');
 			die();
-}
+	}
+	
+	$title = $lot['name'];
+	$history_rates = get_lot_rates($link, $lot['id']);
 
+	$page_content = include_template('lot.php', [
+		'lot' => $lot,
+		'categories' => $categories,
+		'is_auth' => $is_auth,
+		'history_rates' => $history_rates,
+		'errors' => $errors
+		]);
+
+	$layout_content = include_template('layout.php', [
+		'content' => $page_content,
+		'categories' => $categories,
+		'title' => $title,
+		'is_auth' => $is_auth,
+		'user_name' => $user_name
+		]);
+
+	print($layout_content);
+		die ();	
+}
 
 if (empty($_GET['id']) || !is_numeric($_GET['id'])){
     $error_message = "Данной страницы не существует на сайте.";
@@ -36,8 +72,6 @@ if (empty ($lot)) {
 }
 
 $title = $lot['name'];
-
-
 
 $history_rates = get_lot_rates($link, $lot['id']);
 

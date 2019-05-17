@@ -217,7 +217,7 @@ function insert_data($link, string $sql): int
 	$result = mysqli_stmt_execute($stmt);
 
 	if (!$result) {
-		die ("Не удалось добавить данные в базу");
+		die ("Не удалось добавить данные в базу: " . mysqli_error($link));
 	}
 	$received_id = mysqli_insert_id($link);
 
@@ -349,9 +349,17 @@ function get_lot_rates($link, $lot_id_rates): array
 	$sql_lot_rates = "SELECT rates.amount, rates.created_at, users.name
 		FROM rates
 		JOIN lots ON lots.id = rates.lot_id
-		JOIN users ON users.id = rates.lot_id
+		JOIN users ON users.id = rates.user_id
 		WHERE rates.lot_id = '$lot_id_rates'
 		ORDER BY rates.created_at DESC";
-	
+
 	return fetch_data($link, $sql_lot_rates);
+}
+
+function insert_rate($link, $amount_rate, $user_id_rate, $lot_id_rate): int
+{
+	$add_rate = "INSERT INTO rates (amount, user_id, lot_id)
+    VALUES ('$amount_rate', '$user_id_rate', '$lot_id_rate')";
+
+	return insert_data($link, $add_rate);
 }
