@@ -167,7 +167,7 @@ function render404($categories, $is_auth, $user_name, $error_message)
 function render403($categories, $is_auth, $user_name, $error_message)
 {
 	http_response_code(403);
-	$title = "Страница не найдена";
+	$title = "Доступ запрещен";
 	$page_content = include_template ('403.php', [
 	'categories' => $categories,
 	'error_message' => $error_message
@@ -217,7 +217,7 @@ function insert_data($link, string $sql): int
 	$result = mysqli_stmt_execute($stmt);
 
 	if (!$result) {
-		die ("Не удалось добавить данные в базу");
+		die ("Не удалось добавить данные в базу: " . mysqli_error($link));
 	}
 	$received_id = mysqli_insert_id($link);
 
@@ -227,11 +227,11 @@ function insert_data($link, string $sql): int
 	return $received_id;
 }
 
-function insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_end_at, $new_lot_step, $new_lot_price, $new_lot_category_id): int
+function insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_end_at, $new_lot_step, $new_lot_price, $new_lot_user_id, $new_lot_category_id): int
 {
 	$add_lot = "INSERT INTO lots
 	(name, description, img_url, start_price, end_at, rate_step, user_id, category_id) VALUES
-	('$new_lot_name', '$new_lot_message', '$file_url', '$new_lot_price', '$new_lot_end_at', '$new_lot_step', '1', '$new_lot_category_id')";
+	('$new_lot_name', '$new_lot_message', '$file_url', '$new_lot_price', '$new_lot_end_at', '$new_lot_step', '$new_lot_user_id', '$new_lot_category_id')";
 
 	$lot_id = insert_data($link, $add_lot);
 
@@ -264,4 +264,102 @@ function get_user_by_email($link, $user_email): array
 	$sql_user_by_email = "SELECT * FROM users WHERE email = '$user_email'";
 	$result = fetch_data($link, $sql_user_by_email);
 	return count($result) === 1 ? $result[0] : [];
+}
+
+function get_user_rates($link, $user_id_rates): array
+{
+	$sql_user_rates = "SELECT rates.amount, lots.id, lots.img_url, lots.name, categories.name AS category,
+		lots.end_at AS time, rates.created_at, lots.winner_id, users.contact
+		FROM rates
+		JOIN lots ON lots.id = rates.lot_id
+		JOIN users ON users.id = lots.user_id
+		JOIN categories ON categories.id = lots.category_id
+		WHERE rates.user_id = '$user_id_rates'
+		ORDER BY rates.created_at DESC";
+	
+	return fetch_data($link, $sql_user_rates);
+}
+
+function render_error_page($categories, $is_auth, $user_name, $error_message)
+{
+	$title = "Данные не найдены";
+	$page_content = include_template ('error-page.php', [
+	'categories' => $categories,
+	'error_message' => $error_message
+	]);
+
+	$layout_content = include_template('layout.php', [
+	'content' => $page_content,
+	'categories' => $categories,
+	'title' => $title,
+	'is_auth' => $is_auth,
+	'user_name' => $user_name
+	]);
+
+	die($layout_content);
+}
+
+function get_noun_plural_form (int $number, string $one, string $two, string $many): string
+{
+	$number = (int) $number;
+	$mod10 = $number % 10;
+	$mod100 = $number % 100;
+
+	switch (true) {
+		case ($mod100 >= 11 && $mod100 <= 20):
+			return $many;
+
+		case ($mod10 > 5):
+			return $many;
+
+		case ($mod10 === 1):
+			return $one;
+
+		case ($mod10 >= 2 && $mod10 <= 4):
+			return $two;
+
+		default:
+			return $many;
+	}
+}
+
+function show_user_frendly_time($time) {
+	$current_time = time();
+	$time_lives_a_lot = strtotime($time);
+	$time_lives_a_lot = $current_time - $time_lives_a_lot;
+	$hours = floor($time_lives_a_lot / 3600);
+	$minutes = floor($time_lives_a_lot % 3600 / 60);
+
+	if($hours == 0) {
+		$noun_plural_form_minutes = get_noun_plural_form ($minutes, " минуту назад", " минуты назад", " минут назад");
+		$time = $minutes . $noun_plural_form_minutes;
+		return $time;
+	} elseif($hours > 0 && $hours < 24) {
+		$noun_plural_form_hours = get_noun_plural_form ($hours, " час назад", " часа назад", " часов назад");
+		$time = $hours . $noun_plural_form_hours;
+		return $time;
+	}
+	$date = date('d.m.Y', strtotime($time));
+	$time = date('H:i', strtotime($time));
+	return $date . ' ' . $time;
+}
+
+function get_lot_rates($link, $lot_id_rates): array
+{
+	$sql_lot_rates = "SELECT rates.amount, rates.created_at, users.name
+		FROM rates
+		JOIN lots ON lots.id = rates.lot_id
+		JOIN users ON users.id = rates.user_id
+		WHERE rates.lot_id = '$lot_id_rates'
+		ORDER BY rates.created_at DESC";
+
+	return fetch_data($link, $sql_lot_rates);
+}
+
+function insert_rate($link, $amount_rate, $user_id_rate, $lot_id_rate): int
+{
+	$add_rate = "INSERT INTO rates (amount, user_id, lot_id)
+    VALUES ('$amount_rate', '$user_id_rate', '$lot_id_rate')";
+
+	return insert_data($link, $add_rate);
 }

@@ -13,7 +13,7 @@ if (!$is_auth) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $new_lot = $_POST;
+	$new_lot = $_POST;
 
 	$errors = [];
 
@@ -91,12 +91,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$new_lot_end_at = $new_lot['lot-date'];
 		$new_lot_step = $new_lot['lot-step'];
 		$new_lot_price = $new_lot['lot-rate'];
-
+		$new_lot_user_id = $_SESSION['user']['id'];
 		$new_lot_category_id = $new_lot['category'];
 
 		$new_lot_id = insert_lot($link, $new_lot_name,
 			$new_lot_message, $file_url, $new_lot_end_at, $new_lot_step,
-			$new_lot_price, $new_lot_category_id);
+			$new_lot_price, $new_lot_user_id, $new_lot_category_id);
 
 		if($new_lot_id) {
 
