@@ -363,3 +363,27 @@ function insert_rate($link, $amount_rate, $user_id_rate, $lot_id_rate): int
 
 	return insert_data($link, $add_rate);
 }
+
+function get_sough_lots($link, $search_words): array
+{
+	$sql_search_lots = "SELECT lots.id,
+		lots.name,
+		lots.description,
+		lots.img_url,
+		lots.start_price,
+		lots.end_at,
+		lots.rate_step AS step,
+		categories.name AS category,
+		lots.user_id AS author,
+		rates.amount
+		
+	FROM lots
+	LEFT JOIN rates ON rates.lot_id = lots.id
+	LEFT JOIN categories ON lots.category_id = categories.id
+	WHERE MATCH(lots.name, lots.description) AGAINST('$search_words' IN BOOLEAN MODE) AND end_at > NOW()
+	ORDER BY lots.created_at DESC
+	LIMIT 9 OFFSET 1";
+
+	return fetch_data($link, $sql_search_lots);
+}
+
