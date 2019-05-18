@@ -276,7 +276,7 @@ function get_user_rates($link, $user_id_rates): array
 		JOIN categories ON categories.id = lots.category_id
 		WHERE rates.user_id = '$user_id_rates'
 		ORDER BY rates.created_at DESC";
-	
+
 	return fetch_data($link, $sql_user_rates);
 }
 
@@ -375,7 +375,7 @@ function get_sough_lots($link, $search_words, $ofset): array
 		lots.rate_step AS step,
 		categories.name AS category,
 		lots.user_id AS author,
-		rates.amount
+		MAX(IF(amount IS NULL, start_price, amount)) AS amount
 	FROM lots
 	LEFT JOIN rates ON rates.lot_id = lots.id
 	LEFT JOIN categories ON lots.category_id = categories.id
