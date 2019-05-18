@@ -456,3 +456,36 @@ function get_array_paginator($active_page, $total_pages) {
 	$paginator = array_unshift($paginator, 1);
 	return $paginator;
 }
+
+function get_finished_lots ($link): array
+{
+	$sql_finished_lots = "SELECT id, winner_id, name FROM lots WHERE end_at < NOW() AND winner_id IS NULL";
+
+	return fetch_data($link, $sql_finished_lots);
+}
+
+function get_max_rate($link, $lot_id): array
+{
+	$sql_max_rate = "SELECT amount AS max_rate, user_id
+    FROM rates
+    WHERE lot_id = $lot_id
+    ORDER BY amount DESC LIMIT 1";
+
+	return fetch_data($link, $sql_max_rate);
+}
+
+function update_lots ($link, $user_id, $lot_id): int
+{
+	$sql = "UPDATE lots
+     SET winner_id = $user_id
+     WHERE id = $lot_id";
+
+	return insert_data($link, $sql);
+}
+
+function get_user($link, $user_id): array
+{
+	$sql_email = "SELECT email, name FROM users WHERE id = $user_id";
+
+	return fetch_data($link,$sql_email);
+}
