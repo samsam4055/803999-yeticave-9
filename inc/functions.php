@@ -363,7 +363,8 @@ function insert_rate($link, $amount_rate, $user_id_rate, $lot_id_rate): int
 
 	return insert_data($link, $add_rate);
 }
-
+//  запрос в этой функции почему-то выдает несколько одинаковых лотов с разными ценами (если были ставки)
+// сколько ставок - столько и дополнительных ненужных лотов
 function get_sough_lots($link, $search_words, $ofset): array
 {
 	$sql_search_lots = "SELECT lots.id,
@@ -376,7 +377,6 @@ function get_sough_lots($link, $search_words, $ofset): array
 		categories.name AS category,
 		lots.user_id AS author,
 		rates.amount
-		
 	FROM lots
 	LEFT JOIN rates ON rates.lot_id = lots.id
 	LEFT JOIN categories ON lots.category_id = categories.id
