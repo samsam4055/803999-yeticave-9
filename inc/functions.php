@@ -396,6 +396,38 @@ function get_total_search_lots ($link, $search_words): array
 	return fetch_data($link, $sql_search_lots);
 }
 
+function get_total_category_lots ($link, $category_id): array
+{
+	$sql_search_lots = "SELECT count(*) AS total
+	FROM lots
+	WHERE category_id = '$category_id' AND end_at > NOW()";
+
+	return fetch_data($link, $sql_search_lots);
+}
+
+function get_lots_by_category ($link, $category_id, $ofset): array
+{
+	$sql_search_lots = "SELECT lots.id,
+		lots.name,
+		lots.description,
+		lots.img_url,
+		lots.start_price,
+		lots.end_at,
+		lots.rate_step AS step,
+		categories.name AS category,
+		lots.user_id AS author,
+		MAX(IF(amount IS NULL, start_price, amount)) AS amount
+	FROM lots
+	LEFT JOIN rates ON rates.lot_id = lots.id
+	LEFT JOIN categories ON lots.category_id = categories.id
+	WHERE end_at > NOW() AND category_id =  ${category_id}
+	GROUP BY lots.id
+	ORDER BY lots.created_at DESC
+	LIMIT 3 OFFSET ${ofset}";
+
+	return fetch_data($link, $sql_search_lots);
+}
+
 function get_array_paginator($active_page, $total_pages) {
 	if(($active_page === 1 || $active_page === 2) && $total_pages <= 3) {
 		return range(1, $total_pages);
