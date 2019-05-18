@@ -381,6 +381,7 @@ function get_sough_lots($link, $search_words, $ofset): array
 	LEFT JOIN rates ON rates.lot_id = lots.id
 	LEFT JOIN categories ON lots.category_id = categories.id
 	WHERE MATCH(lots.name, lots.description) AGAINST('$search_words' IN BOOLEAN MODE) AND end_at > NOW()
+	GROUP BY lots.id
 	ORDER BY lots.created_at DESC
 	LIMIT 3 OFFSET ${ofset}";
 
