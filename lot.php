@@ -20,6 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$errors['cost'] = 'Минимальная ставка ' . $lot['new_price'] . ' р';
 	}
 	
+	if($lot['user_id'] === $_SESSION['user']['id'] ) {
+		$errors['cost'] = 'Это Ваш лот';
+	}
+	
+	if(strtotime($lot['end_at']) < time() ) {
+		$errors['cost'] = 'Торги закончены';
+	}
+	
 	if(!$errors) {
 		
 		$user_id_rate = $_SESSION['user']['id'];

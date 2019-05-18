@@ -135,7 +135,7 @@ function get_active_lots($link): array
 
 function get_lot_by_id($link, int $lot_id): array
 {
-	$sql_one_lot = "SELECT lots.name AS name, lots.id, lots.description, categories.name
+	$sql_one_lot = "SELECT lots.name AS name, lots.id, lots.user_id, lots.description, categories.name
 	AS category, start_price, img_url, end_at, MAX(IF(amount IS NULL, start_price, amount)) AS price, MAX(IF(amount IS NULL, start_price, amount))+rate_step AS new_price FROM lots
 	LEFT JOIN categories ON categories.id = category_id
 	LEFT JOIN rates r ON lots.id = r.lot_id
@@ -362,4 +362,66 @@ function insert_rate($link, $amount_rate, $user_id_rate, $lot_id_rate): int
     VALUES ('$amount_rate', '$user_id_rate', '$lot_id_rate')";
 
 	return insert_data($link, $add_rate);
+}
+//  запрос в этой функции почему-то выдает несколько одинаковых лотов с разными ценами (если были ставки)
+// сколько ставок - столько и дополнительных ненужных лотов
+function get_sough_lots($link, $search_words, $ofset): array
+{
+	$sql_search_lots = "SELECT lots.id,
+		lots.name,
+		lots.description,
+		lots.img_url,
+		lots.start_price,
+		lots.end_at,
+		lots.rate_step AS step,
+		categories.name AS category,
+		lots.user_id AS author,
+		rates.amount
+	FROM lots
+	LEFT JOIN rates ON rates.lot_id = lots.id
+	LEFT JOIN categories ON lots.category_id = categories.id
+	WHERE MATCH(lots.name, lots.description) AGAINST('$search_words' IN BOOLEAN MODE) AND end_at > NOW()
+	GROUP BY lots.id
+	ORDER BY lots.created_at DESC
+	LIMIT 3 OFFSET ${ofset}";
+
+	return fetch_data($link, $sql_search_lots);
+}
+
+function get_total_search_lots ($link, $search_words): array
+{
+	$sql_search_lots = "SELECT count(*) AS total
+	FROM lots
+	WHERE MATCH(lots.name, lots.description) AGAINST('$search_words' IN BOOLEAN MODE) AND end_at > NOW()";
+
+	return fetch_data($link, $sql_search_lots);
+}
+
+function get_array_paginator($active_page, $total_pages) {
+	if(($active_page === 1 || $active_page === 2) && $total_pages <= 3) {
+		return range(1, $total_pages);
+	}
+
+	if($active_page === 1 && $total_pages > 3) {
+		$paginator = range(1, 3);
+		return array_push($paginator, $total_pages);
+	}
+
+	if($active_page === 2 && $total_pages > 3) {
+		$paginator = range(1, 4);
+		return array_push($paginator, $total_pages);
+	}
+
+	if($total_pages === $active_page) {
+		return range($total_pages - 3, $total_pages);
+	}
+
+	if($total_pages === $active_page - 1) {
+		return range($total_pages - 4, $total_pages);
+	}
+
+	$paginator = range($active_page - 2, $active_page + 2);
+	$paginator = array_push($paginator, $total_pages);
+	$paginator = array_unshift($paginator, 1);
+	return $paginator;
 }
