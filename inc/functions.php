@@ -364,7 +364,7 @@ function insert_rate($link, $amount_rate, $user_id_rate, $lot_id_rate): int
 	return insert_data($link, $add_rate);
 }
 
-function get_sough_lots($link, $search_words): array
+function get_sough_lots($link, $search_words, $ofset): array
 {
 	$sql_search_lots = "SELECT lots.id,
 		lots.name,
@@ -382,8 +382,45 @@ function get_sough_lots($link, $search_words): array
 	LEFT JOIN categories ON lots.category_id = categories.id
 	WHERE MATCH(lots.name, lots.description) AGAINST('$search_words' IN BOOLEAN MODE) AND end_at > NOW()
 	ORDER BY lots.created_at DESC
-	LIMIT 9 OFFSET 1";
+	LIMIT 3 OFFSET ${ofset}";
 
 	return fetch_data($link, $sql_search_lots);
 }
 
+function get_total_search_lots ($link, $search_words): array
+{
+	$sql_search_lots = "SELECT count(*) AS total
+	FROM lots
+	WHERE MATCH(lots.name, lots.description) AGAINST('$search_words' IN BOOLEAN MODE) AND end_at > NOW()";
+
+	return fetch_data($link, $sql_search_lots);
+}
+
+function get_array_paginator($active_page, $total_pages) {
+	if(($active_page === 1 || $active_page === 2) && $total_pages <= 3) {
+		return range(1, $total_pages);
+	}
+
+	if($active_page === 1 && $total_pages > 3) {
+		$paginator = range(1, 3);
+		return array_push($paginator, $total_pages);
+	}
+
+	if($active_page === 2 && $total_pages > 3) {
+		$paginator = range(1, 4);
+		return array_push($paginator, $total_pages);
+	}
+
+	if($total_pages === $active_page) {
+		return range($total_pages - 3, $total_pages);
+	}
+
+	if($total_pages === $active_page - 1) {
+		return range($total_pages - 4, $total_pages);
+	}
+
+	$paginator = range($active_page - 2, $active_page + 2);
+	$paginator = array_push($paginator, $total_pages);
+	$paginator = array_unshift($paginator, 1);
+	return $paginator;
+}
