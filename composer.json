@@ -1,0 +1,12 @@
+{
+    "name": "vendor/name",
+    "authors": [
+        {
+            "name": "samsam4055",
+            "email": "39153320+samsam4055@users.noreply.github.com"
+        }
+    ],
+    "require": {
+        "swiftmailer/swiftmailer": "^6.2"
+    }
+}

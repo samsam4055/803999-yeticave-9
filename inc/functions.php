@@ -474,13 +474,21 @@ function get_max_rate($link, $lot_id): array
 	return fetch_data($link, $sql_max_rate);
 }
 
+function update_data($link, string $sql): int
+{
+	$stmt = db_get_prepare_stmt($link, $sql);
+	$result = mysqli_stmt_execute($stmt);
+
+	return $result;
+}
+
 function update_lots ($link, $user_id, $lot_id): int
 {
 	$sql = "UPDATE lots
      SET winner_id = $user_id
      WHERE id = $lot_id";
 
-	return insert_data($link, $sql);
+	return update_data($link, $sql);
 }
 
 function get_user($link, $user_id): array
