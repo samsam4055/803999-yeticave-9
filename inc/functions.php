@@ -276,7 +276,7 @@ function get_user_rates($link, $user_id_rates): array
 		JOIN categories ON categories.id = lots.category_id
 		WHERE rates.user_id = '$user_id_rates'
 		ORDER BY rates.created_at DESC";
-	
+
 	return fetch_data($link, $sql_user_rates);
 }
 
@@ -346,7 +346,7 @@ function show_user_frendly_time($time) {
 
 function get_lot_rates($link, $lot_id_rates): array
 {
-	$sql_lot_rates = "SELECT rates.amount, rates.created_at, users.name
+	$sql_lot_rates = "SELECT rates.amount, rates.user_id, rates.created_at, users.name
 		FROM rates
 		JOIN lots ON lots.id = rates.lot_id
 		JOIN users ON users.id = rates.user_id
@@ -363,8 +363,7 @@ function insert_rate($link, $amount_rate, $user_id_rate, $lot_id_rate): int
 
 	return insert_data($link, $add_rate);
 }
-//  запрос в этой функции почему-то выдает несколько одинаковых лотов с разными ценами (если были ставки)
-// сколько ставок - столько и дополнительных ненужных лотов
+
 function get_sough_lots($link, $search_words, $ofset): array
 {
 	$sql_search_lots = "SELECT lots.id,
@@ -376,14 +375,14 @@ function get_sough_lots($link, $search_words, $ofset): array
 		lots.rate_step AS step,
 		categories.name AS category,
 		lots.user_id AS author,
-		rates.amount
+		MAX(IF(amount IS NULL, start_price, amount)) AS amount
 	FROM lots
 	LEFT JOIN rates ON rates.lot_id = lots.id
 	LEFT JOIN categories ON lots.category_id = categories.id
 	WHERE MATCH(lots.name, lots.description) AGAINST('$search_words' IN BOOLEAN MODE) AND end_at > NOW()
 	GROUP BY lots.id
 	ORDER BY lots.created_at DESC
-	LIMIT 3 OFFSET ${ofset}";
+	LIMIT 9 OFFSET ${ofset}";
 
 	return fetch_data($link, $sql_search_lots);
 }
@@ -393,6 +392,38 @@ function get_total_search_lots ($link, $search_words): array
 	$sql_search_lots = "SELECT count(*) AS total
 	FROM lots
 	WHERE MATCH(lots.name, lots.description) AGAINST('$search_words' IN BOOLEAN MODE) AND end_at > NOW()";
+
+	return fetch_data($link, $sql_search_lots);
+}
+
+function get_total_category_lots ($link, $category_id): array
+{
+	$sql_search_lots = "SELECT count(*) AS total
+	FROM lots
+	WHERE category_id = '$category_id' AND end_at > NOW()";
+
+	return fetch_data($link, $sql_search_lots);
+}
+
+function get_lots_by_category ($link, $category_id, $ofset): array
+{
+	$sql_search_lots = "SELECT lots.id,
+		lots.name,
+		lots.description,
+		lots.img_url,
+		lots.start_price,
+		lots.end_at,
+		lots.rate_step AS step,
+		categories.name AS category,
+		lots.user_id AS author,
+		MAX(IF(amount IS NULL, start_price, amount)) AS amount
+	FROM lots
+	LEFT JOIN rates ON rates.lot_id = lots.id
+	LEFT JOIN categories ON lots.category_id = categories.id
+	WHERE end_at > NOW() AND category_id =  ${category_id}
+	GROUP BY lots.id
+	ORDER BY lots.created_at DESC
+	LIMIT 9 OFFSET ${ofset}";
 
 	return fetch_data($link, $sql_search_lots);
 }
@@ -424,4 +455,45 @@ function get_array_paginator($active_page, $total_pages) {
 	$paginator = array_push($paginator, $total_pages);
 	$paginator = array_unshift($paginator, 1);
 	return $paginator;
+}
+
+function get_finished_lots ($link): array
+{
+	$sql_finished_lots = "SELECT id, winner_id, name FROM lots WHERE end_at < NOW() AND winner_id IS NULL";
+
+	return fetch_data($link, $sql_finished_lots);
+}
+
+function get_max_rate($link, $lot_id): array
+{
+	$sql_max_rate = "SELECT amount AS max_rate, user_id
+    FROM rates
+    WHERE lot_id = $lot_id
+    ORDER BY amount DESC LIMIT 1";
+
+	return fetch_data($link, $sql_max_rate);
+}
+
+function update_data($link, string $sql): int
+{
+	$stmt = db_get_prepare_stmt($link, $sql);
+	$result = mysqli_stmt_execute($stmt);
+
+	return $result;
+}
+
+function update_lots ($link, $user_id, $lot_id): int
+{
+	$sql = "UPDATE lots
+     SET winner_id = $user_id
+     WHERE id = $lot_id";
+
+	return update_data($link, $sql);
+}
+
+function get_user($link, $user_id): array
+{
+	$sql_email = "SELECT email, name FROM users WHERE id = $user_id";
+
+	return fetch_data($link,$sql_email);
 }

@@ -3,7 +3,7 @@
       <ul class="nav__list container">
         <?php foreach ($categories as $category) : ?>
             <li class="nav__item">
-                <a href="all-lots.html"><?= esc($category['name']); ?></a>
+                <a href="all-lots.php?id=<?=$category['id'];?>"><?= esc($category['name']); ?></a>
             </li>
         <?php endforeach; ?>
       </ul>
@@ -19,7 +19,7 @@
           <p class="lot-item__description"><?= esc($lot['description']); ?></p>
         </div>
         <div class="lot-item__right">
-           <?php if($is_auth): ?>
+           <?php if($rate_allowed): ?>
           <div class="lot-item__state">
             <div class="lot-item__timer timer <?= add_time_class($lot['end_at']); ?>">
                <?= get_lot_timer($lot['end_at']); ?>

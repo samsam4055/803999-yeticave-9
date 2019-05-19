@@ -3,7 +3,7 @@
     <ul class="nav__list container">
       <?php foreach ($categories as $category) : ?>
           <li class="nav__item">
-              <a href="all-lots.html"><?= esc($category['name']); ?></a>
+              <a href="all-lots.php?id=<?=$category['id'];?>"><?= esc($category['name']); ?></a>
           </li>
       <?php endforeach; ?>
     </ul>
@@ -37,7 +37,7 @@
           <?=show_user_frendly_time($rate['created_at']);?>
         </td>
       </tr>
-      <?php endforeach; ?>	 
+      <?php endforeach; ?>
     </table>
   </section>
 </main>
