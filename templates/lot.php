@@ -19,7 +19,7 @@
           <p class="lot-item__description"><?= esc($lot['description']); ?></p>
         </div>
         <div class="lot-item__right">
-           <?php if($is_auth): ?>
+           <?php if($rate_allowed): ?>
           <div class="lot-item__state">
             <div class="lot-item__timer timer <?= add_time_class($lot['end_at']); ?>">
                <?= get_lot_timer($lot['end_at']); ?>

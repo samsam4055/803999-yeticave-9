@@ -18,7 +18,7 @@ define('MAX_LOT_NAME_LENGTH', '128');
 define('MAX_LOT_DESC_LENGTH', '512');
 define('MAX_USER_NAME_LENGTH', '64');
 define('MAX_USER_CONTACT_LENGTH', '128');
-define('LOTS_PAGE', 3);
+define('LOTS_PAGE', 9);
 
 $db = [
   "host" => "localhost",

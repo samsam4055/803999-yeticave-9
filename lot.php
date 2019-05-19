@@ -6,44 +6,44 @@ require_once 'inc/data.php';
 $categories = get_categories($link);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	
+
 	if (!$is_auth) {
     $error_message = "Делать ставки могут только авторизированные пользователи";
     render403($categories, $is_auth, $user_name, $error_message);
 	}
-	
+	$rate_allowed = true;
 	$new_rate = $_POST;
 	$errors = [];
 	$lot = get_lot_by_id($link, (int)$new_rate['id']);
-	
+
 	if($new_rate['cost'] < $lot['new_price'] ) {
 		$errors['cost'] = 'Минимальная ставка ' . $lot['new_price'] . ' р';
 	}
-	
+
 	if($lot['user_id'] === $_SESSION['user']['id'] ) {
 		$errors['cost'] = 'Это Ваш лот';
 	}
-	
+
 	if(strtotime($lot['end_at']) < time() ) {
 		$errors['cost'] = 'Торги закончены';
 	}
-	
+
 	if(!$errors) {
-		
+
 		$user_id_rate = $_SESSION['user']['id'];
 		$lot_id_rate = $lot['id'];
 		$amount_rate = $new_rate['cost'];
 
 		$new_rate = insert_rate($link, $amount_rate, $user_id_rate, $lot_id_rate);
-		
+
 		if (!$new_rate){
-			die ("Не удалось добавить ставку, попробуйте позже");	
+			die ("Не удалось добавить ставку, попробуйте позже");
 		}
-		
+
 		header('Location: my-bets.php');
 			die();
 	}
-	
+
 	$title = $lot['name'];
 	$history_rates = get_lot_rates($link, $lot['id']);
 
@@ -52,7 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		'categories' => $categories,
 		'is_auth' => $is_auth,
 		'history_rates' => $history_rates,
-		'errors' => $errors
+		'errors' => $errors,
+		'rate_allowed' => $rate_allowed
 		]);
 
 	$layout_content = include_template('layout.php', [
@@ -64,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		]);
 
 	print($layout_content);
-		die ();	
+		die ();
 }
 
 if (empty($_GET['id']) || !is_numeric($_GET['id'])){
@@ -83,11 +84,21 @@ $title = $lot['name'];
 
 $history_rates = get_lot_rates($link, $lot['id']);
 
+if ($is_auth && (strtotime($lot['end_at']) > time() ) && ($lot['user_id'] !== $_SESSION['user']['id'])
+    	&&($history_rates[0]['user_id'] !== $_SESSION['user']['id'])){
+
+		$rate_allowed = true;
+}
+else {
+		$rate_allowed = false;
+}
+
 $page_content = include_template('lot.php', [
     'lot' => $lot,
     'categories' => $categories,
     'is_auth' => $is_auth,
-	'history_rates' => $history_rates
+    'history_rates' => $history_rates,
+    'rate_allowed' => $rate_allowed
     ]);
 
 $layout_content = include_template('layout.php', [

@@ -346,7 +346,7 @@ function show_user_frendly_time($time) {
 
 function get_lot_rates($link, $lot_id_rates): array
 {
-	$sql_lot_rates = "SELECT rates.amount, rates.created_at, users.name
+	$sql_lot_rates = "SELECT rates.amount, rates.user_id, rates.created_at, users.name
 		FROM rates
 		JOIN lots ON lots.id = rates.lot_id
 		JOIN users ON users.id = rates.user_id
@@ -382,7 +382,7 @@ function get_sough_lots($link, $search_words, $ofset): array
 	WHERE MATCH(lots.name, lots.description) AGAINST('$search_words' IN BOOLEAN MODE) AND end_at > NOW()
 	GROUP BY lots.id
 	ORDER BY lots.created_at DESC
-	LIMIT 3 OFFSET ${ofset}";
+	LIMIT 9 OFFSET ${ofset}";
 
 	return fetch_data($link, $sql_search_lots);
 }
@@ -423,7 +423,7 @@ function get_lots_by_category ($link, $category_id, $ofset): array
 	WHERE end_at > NOW() AND category_id =  ${category_id}
 	GROUP BY lots.id
 	ORDER BY lots.created_at DESC
-	LIMIT 3 OFFSET ${ofset}";
+	LIMIT 9 OFFSET ${ofset}";
 
 	return fetch_data($link, $sql_search_lots);
 }
