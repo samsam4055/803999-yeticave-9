@@ -84,8 +84,14 @@ $title = $lot['name'];
 
 $history_rates = get_lot_rates($link, $lot['id']);
 
+if ($is_auth && $history_rates !== [] && ($history_rates[0]['user_id'] === $_SESSION['user']['id'])){
+	$cur_user_rate = true;
+} else {
+	$cur_user_rate = false;
+}
+
 if ($is_auth && (strtotime($lot['end_at']) > time() ) && ($lot['user_id'] !== $_SESSION['user']['id'])
-    	&&($history_rates[0]['user_id'] !== $_SESSION['user']['id'])){
+    	&& !$cur_user_rate){
 
 		$rate_allowed = true;
 }
