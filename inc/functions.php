@@ -474,7 +474,7 @@ function get_max_rate($link, $lot_id): array
 	return fetch_data($link, $sql_max_rate);
 }
 
-function update_data($link, string $sql): int
+function update_data($link, string $sql): bool
 {
 	$stmt = db_get_prepare_stmt($link, $sql);
 	$result = mysqli_stmt_execute($stmt);
@@ -482,7 +482,7 @@ function update_data($link, string $sql): int
 	return $result;
 }
 
-function update_lots ($link, $user_id, $lot_id): int
+function update_lots ($link, $user_id, $lot_id): bool
 {
 	$sql = "UPDATE lots
      SET winner_id = $user_id
@@ -493,7 +493,25 @@ function update_lots ($link, $user_id, $lot_id): int
 
 function get_user($link, $user_id): array
 {
-	$sql_email = "SELECT email, name FROM users WHERE id = $user_id";
+	$sql_user = "SELECT email, contact, password, avatar_url, name FROM users WHERE id = $user_id";
 
-	return fetch_data($link,$sql_email);
+	return fetch_data($link,$sql_user);
+}
+
+function update_user ($link, $user_id, $new_data_user_name, $new_data_user_message): bool
+{
+	$sql = "UPDATE users
+	SET name = '$new_data_user_name', contact = '$new_data_user_message'
+	WHERE id = $user_id";
+
+	return update_data($link, $sql);
+}
+
+function update_user_with_avatar($link, $user_id, $new_data_user_name, $new_data_user_message, $file_url): bool
+{
+	$sql = "UPDATE users
+	SET name = '$new_data_user_name', contact = '$new_data_user_message', avatar_url = '$file_url'
+	WHERE id = $user_id";
+
+	return update_data($link, $sql);
 }

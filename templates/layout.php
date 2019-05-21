@@ -27,7 +27,13 @@
 		<?php if ($is_auth === 1) : ?>
 
 			<div class="user-menu__logged">
-				<p><?= esc($user_name); ?></p>
+				<p><img style="margin-left: 5px;" 
+				   src="<?=isset($_SESSION['user']['avatar_url']) ? $_SESSION['user']['avatar_url'] : "img/no-avatar.jpg";?>" 
+				   width="20" height="20">
+				   <a href="user.php" style="font-weight: 700; margin-left: 0; font-size: 16px;">
+				     <?= esc($user_name); ?>
+				   </a>
+				 </p>
 				<a class="user-menu__bets" href="my-bets.php">Мои ставки</a>
 				<a class="user-menu__logout" href="logout.php">Выход</a>
 			</div>

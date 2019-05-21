@@ -7,6 +7,11 @@ $categories = get_categories($link);
 
 $title = "Вход";
 
+if($is_auth) {
+	$error = "Вы уже авторизировались.";
+	render403($categories, $is_auth, $user_name, $error);
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $login_form = $_POST;
 
