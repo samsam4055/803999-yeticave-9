@@ -3,12 +3,12 @@ $is_auth = 0;
 $user_name = '';
 session_start();
 
-if(isset($_SESSION['user'])) {
+if (isset($_SESSION['user'])) {
     $user_name = $_SESSION['user']['name'];
     $is_auth = 1;
 } else {
-  $is_auth = 0;
-  $user_name = '';
+    $is_auth = 0;
+    $user_name = '';
 }
 
 date_default_timezone_set("Europe/Moscow");
@@ -21,10 +21,10 @@ define('MAX_USER_CONTACT_LENGTH', '128');
 define('LOTS_PAGE', 9);
 
 $db = [
-  "host" => "localhost",
-  "user" => "root",
-  "password" => "",
-  "database" => "yeticave",
+    "host" => "localhost",
+    "user" => "root",
+    "password" => "",
+    "database" => "yeticave",
 ];
 
 $link = mysqli_connect($db['host'], $db['user'], $db['password'], $db['database']);
