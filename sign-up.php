@@ -26,8 +26,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$errors['email'] = 'Пользователь с этим e-mail уже зарегистрирован';
 	}
 
+	if (!isset($errors['name']) && (ltrim($new_user['name']) !== $new_user['name'])) {
+		$errors['name'] = 'Имя не должно начинаться или состоять только из пробелов';
+	}
+
 	if (!isset($errors['name']) && (strlen($new_user['name']) > MAX_USER_NAME_LENGTH)) {
 		$errors['name'] = 'Имя больше допустимых ' . MAX_USER_NAME_LENGTH . ' символов';
+	}
+
+	if (!isset($errors['message']) && (ltrim($new_user['message']) !== $new_user['message'])) {
+		$errors['message'] = 'Контакты не должны начинаться или состоять только из пробелов';
 	}
 
 	if (!isset($errors['message']) && (strlen($new_user['message']) > MAX_USER_CONTACT_LENGTH)) {

@@ -27,8 +27,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$errors['category'] = 'Выберите категорию';
 	}
 
+	if (!isset($errors['lot-name']) && (ltrim($new_lot['lot-name']) !== $new_lot['lot-name'])) {
+		$errors['lot-name'] = 'Наименование не должно начинаться или состоять только из пробелов';
+	}
+
 	if (!isset($errors['lot-name']) && (strlen($new_lot['lot-name']) > MAX_LOT_NAME_LENGTH)) {
 		$errors['lot-name'] = 'Наименование больше допустимых ' . MAX_LOT_NAME_LENGTH . ' символов';
+	}
+
+	if (!isset($errors['message']) && (ltrim($new_lot['message']) !== $new_lot['message'])) {
+		$errors['message'] = 'Описание не должно начинаться или состоять только из пробелов';
 	}
 
 	if (!isset($errors['message']) && (strlen($new_lot['message']) > MAX_LOT_DESC_LENGTH)) {
