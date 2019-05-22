@@ -515,3 +515,26 @@ function update_user_with_avatar($link, $user_id, $new_data_user_name, $new_data
 
     return update_data($link, $sql);
 }
+
+function get_my_lots($link, $user_id): array
+{
+    $sql_lots = "SELECT lots.name AS name, lots.id, categories.name
+	AS category, start_price, img_url, end_at FROM lots
+	JOIN categories ON categories.id = category_id
+	JOIN users ON users.id = lots.user_id
+	WHERE user_id = $user_id
+	ORDER BY lots.created_at DESC LIMIT 9";
+
+    return fetch_data($link, $sql_lots);
+}
+
+function get_removable_lot($link, $remove_lot_id): array
+{
+    $sql_one_lot = "SELECT lots.user_id, amount FROM lots
+	LEFT JOIN rates r ON lots.id = r.lot_id
+	LEFT JOIN users ON users.id = lots.user_id
+	WHERE lots.id = ${remove_lot_id}
+	GROUP BY lots.id";
+
+    return fetch_data($link, $sql_one_lot);
+}

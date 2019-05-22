@@ -7,6 +7,9 @@ $categories = get_categories($link);
 
 if (isset($_GET['id'])) {
     $category_id = $_GET['id'];
+} else {
+	$error_message = "Страница не найдена.";
+    render404($categories, $is_auth, $user_name, $error_message);
 }
 
 $total_search_lots = get_total_category_lots($link, $category_id);
