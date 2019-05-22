@@ -538,3 +538,10 @@ function get_removable_lot($link, $remove_lot_id): array
 
     return fetch_data($link, $sql_one_lot);
 }
+
+function remove_lot($link, $remove_lot_id): bool
+{
+    $sql = "DELETE FROM `lots` WHERE `lots`.`id` = ${remove_lot_id}";
+
+    return update_data($link, $sql);
+}

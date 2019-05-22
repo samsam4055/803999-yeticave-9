@@ -19,15 +19,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 	$remove_lot_id = $_POST['remove'];
 	
-	$lot = get_removable_lot($link, $remove_lot_id);
+	$removable_lot = get_removable_lot($link, $remove_lot_id);
+	
+	if (empty($removable_lot)) {
+    $error_message = $_SESSION['user']['name'] . "," . " Вы страшный человек - пытаетесь удалить несуществующий лот, или хотите взломать наш сайт :)";
+    render403($categories, $is_auth, $user_name, $error_message);
+    }
 
-	if (!is_null($lot[0]['amount']) || $lot[0]['user_id'] !== $_SESSION['user']['id']){
+	if (!is_null($removable_lot[0]['amount']) || $removable_lot[0]['user_id'] !== $_SESSION['user']['id']){
 		$error_message = "Вы пытаетесь удилить лот, на который уже были ставки или не свой лот";
 		render403($categories, $is_auth, $user_name, $error_message);
 	}
-
+	
+	$deleted = remove_lot($link, $remove_lot_id);
+	
+	if ($deleted) {
+		header('Location: my-lots.php');
+        die();
+	} else {
+		die ("С Вашим удалением что-то пошло не так...");
+	}
 }
-
 
 $user_id = $_SESSION['user']['id'];
 $lots = get_my_lots($link, $user_id);

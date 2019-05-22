@@ -10,7 +10,7 @@
     </nav>
     <form class="form container <?= $errors ? 'form--invalid' : ''; ?>" action="user.php" method="post"
           enctype="multipart/form-data" autocomplete="off">
-        <a class="text-link" href="my-lots.php">Мои лоты</a>
+        <a class="text-link" href="my-lots.php"><h3>Смотреть мои лоты</h3></a>
 		<h3>Мой аккаунт</h3>
         <div class="form__item <?= isset($errors['email']) ? "form__item--invalid" : ""; ?>">
             <label for="email">Мой E-mail</label>
