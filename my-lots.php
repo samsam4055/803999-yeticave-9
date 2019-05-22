@@ -2,7 +2,7 @@
 
 require_once 'inc/functions.php';
 require_once 'inc/data.php';
-require_once 'get-winner.php';
+
 $title = 'Мои лоты';
 $categories = get_categories($link);
 
