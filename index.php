@@ -4,7 +4,7 @@ $title = 'Главная';
 
 require_once 'inc/functions.php';
 require_once 'inc/data.php';
-require_once 'get-winner.php';
+include_once 'get-winner.php';
 
 $categories = get_categories($link);
 $lots = get_active_lots($link);
