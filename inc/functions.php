@@ -545,3 +545,10 @@ function remove_lot($link, $remove_lot_id): bool
 
     return update_data($link, $sql);
 }
+
+function get_category_by_id($link, $cat_id): array
+{
+    $sql_cat = "SELECT id FROM categories WHERE id = ${cat_id}";
+
+    return fetch_data($link, $sql_cat);
+}

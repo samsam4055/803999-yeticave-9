@@ -16,6 +16,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = [];
     $lot = get_lot_by_id($link, (int)$new_rate['id']);
 
+    if (!$lot) {
+        $error_message = "Вы пытаетесь сделать ставку на несуществующий лот";
+        render403($categories, $is_auth, $user_name, $error_message);
+    }
+
+    $max_rate = get_max_rate($link, (int)$new_rate['id']);
+
+    if ($max_rate[0]['user_id'] === $_SESSION['user']['id']) {
+        $errors['cost'] = 'Последняя ставка сделана Вами';
+    }
+	
     if ($new_rate['cost'] < $lot['new_price']) {
         $errors['cost'] = 'Минимальная ставка ' . $lot['new_price'] . ' р';
     }

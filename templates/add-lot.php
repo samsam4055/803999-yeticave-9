@@ -17,7 +17,7 @@ $saved_date = $_POST['lot-date'] ?? '';
             <?php endforeach; ?>
         </ul>
     </nav>
-    <form class="form form--add-lot container <?= $errors ? 'form--invalid' : ''; ?>" action="add.php" method="post"
+    <form class="form form--add-lot container <?= isset($errors) ? 'form--invalid' : ''; ?>" action="add.php" method="post"
           enctype="multipart/form-data">
         <h2>Добавление лота</h2>
         <div class="form__container-two">

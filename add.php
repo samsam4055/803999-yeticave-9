@@ -23,9 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    if ($new_lot['category'] <= 0) {
-        $errors['category'] = 'Выберите категорию';
-    }
+    $selected_category = get_category_by_id($link, $new_lot['category']);
+
+	if (!$selected_category) {
+		$errors['category'] = 'Выберите категорию из предложенного списка';
+	}
 
     if (!isset($errors['lot-name']) && (ltrim($new_lot['lot-name']) !== $new_lot['lot-name'])) {
         $errors['lot-name'] = 'Наименование не должно начинаться или состоять только из пробелов';
