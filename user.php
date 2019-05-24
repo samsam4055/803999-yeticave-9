@@ -68,7 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($without_avatar) {
             $is_updated_user = update_user($link, $user_id, $new_data_user_name, $new_data_user_message);
-        } else {
+        }
+        else {
 
             if ($file_type === 'image/jpeg') {
                 $file_type = '.jpeg';

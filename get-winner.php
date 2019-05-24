@@ -32,6 +32,13 @@ if (!empty($lots)) {
                     ->addPart($page, 'text/html');
                 $mailer->send($message);
             }
+        } 
+        else 
+        {
+            if (time() - strtotime($lot['end_at']) > strtotime(LIFETIME_INACTIVE_LOT))
+            {
+                remove_lot($link, $lot['id']);
+            }
         }
     }
 }

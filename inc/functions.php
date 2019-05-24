@@ -459,7 +459,7 @@ function get_array_paginator($active_page, $total_pages)
 
 function get_finished_lots($link): array
 {
-    $sql_finished_lots = "SELECT id, winner_id, name FROM lots WHERE end_at < NOW() AND winner_id IS NULL";
+    $sql_finished_lots = "SELECT id, winner_id, name, end_at FROM lots WHERE end_at < NOW() AND winner_id IS NULL";
 
     return fetch_data($link, $sql_finished_lots);
 }
