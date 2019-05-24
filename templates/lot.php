@@ -36,7 +36,7 @@
                         <form class="lot-item__form" action="lot.php" method="post" autocomplete="off">
                             <p class="lot-item__form-item form__item <?= isset($errors['cost']) ? "form__item--invalid" : ""; ?>">
                                 <label for="cost">Ваша ставка</label>
-                                <input id="cost" type="text" name="cost"
+                                <input id="cost" type="text" name="cost" value="<?= isset($_POST['cost']) ? esc($_POST['cost']) : ""; ?>"
                                        placeholder="<?= format_price($lot['new_price']); ?>">
                                 <input type="hidden" name="id" value="<?= $lot['id']; ?>">
                                 <span class="form__error"><?= isset($errors['cost']) ? $errors['cost'] : ""; ?></span>

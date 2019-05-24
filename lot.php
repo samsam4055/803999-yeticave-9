@@ -26,7 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($max_rate[0]['user_id'] === $_SESSION['user']['id']) {
         $errors['cost'] = 'Последняя ставка сделана Вами';
     }
-	
+    $new_rate['cost'] = str_replace(' ', '', $new_rate['cost']);
+
     if ($new_rate['cost'] < $lot['new_price']) {
         $errors['cost'] = 'Минимальная ставка ' . $lot['new_price'] . ' р';
     }

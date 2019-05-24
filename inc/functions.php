@@ -98,9 +98,9 @@ function db_get_prepare_stmt($link, $sql, $data = [])
     return $stmt;
 }
 
-function fetch_data($link, string $sql): array
+function fetch_data($link, string $sql, array $data = []): array
 {
-    $stmt = db_get_prepare_stmt($link, $sql);
+    $stmt = db_get_prepare_stmt($link, $sql, $data);
 
     if (!mysqli_stmt_execute($stmt)) {
         die("Ошибка MySQL: " . mysqli_error($link));
@@ -390,9 +390,9 @@ function get_total_search_lots($link, $search_words): array
 {
     $sql_search_lots = "SELECT count(*) AS total
 	FROM lots
-	WHERE MATCH(lots.name, lots.description) AGAINST('$search_words' IN BOOLEAN MODE) AND end_at > NOW()";
+	WHERE MATCH(lots.name, lots.description) AGAINST(?) AND end_at > NOW()";
 
-    return fetch_data($link, $sql_search_lots);
+    return fetch_data($link, $sql_search_lots, [$search_words]);
 }
 
 function get_total_category_lots($link, $category_id): array
