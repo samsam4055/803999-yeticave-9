@@ -17,6 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $errors = [];
 
+    if (!isset($new_lot['lot-name']) || !isset($new_lot['category']) || !isset($new_lot['message']) 
+		|| !isset($new_lot['lot-rate']) || !isset($new_lot['lot-step']) || !isset($new_lot['lot-date']) || !isset($_FILES['image']['name'])){
+
+		$error = "Вы удалили поля из формы";
+        render403($categories, $is_auth, $user_name, $error);
+    }
+
     foreach ($new_lot as $key => $value) {
         if (empty($value)) {
             $errors[$key] = 'Это поле надо заполнить';

@@ -17,6 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $errors = [];
 
+    if (!isset($login_form['email']) || !isset($login_form['password'])){
+        $error = "Вы удалили поля из формы входа";
+        render403($categories, $is_auth, $user_name, $error);
+	}
+
     foreach ($login_form as $key => $value) {
         if (empty($value)) {
             $errors[$key] = 'Заполните поле для входа';

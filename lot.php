@@ -14,7 +14,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $rate_allowed = true;
     $new_rate = $_POST;
     $errors = [];
-    $lot = get_lot_by_id($link, (int)$new_rate['id']);
+
+    if (!isset($new_rate['id']) || !isset($new_rate['cost'])){
+        $error = "Вы удалили поле из формы ставок";
+        render403($categories, $is_auth, $user_name, $error);
+    }
+
+	$lot = get_lot_by_id($link, (int)$new_rate['id']);
 
     if (!$lot) {
         $error_message = "Вы пытаетесь сделать ставку на несуществующий лот";
@@ -23,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $max_rate = get_max_rate($link, (int)$new_rate['id']);
 
-    if ($max_rate[0]['user_id'] === $_SESSION['user']['id']) {
+    if (isset($max_rate[0]) && $max_rate[0]['user_id'] === $_SESSION['user']['id']) {
         $errors['cost'] = 'Последняя ставка сделана Вами';
     }
     $new_rate['cost'] = str_replace(' ', '', $new_rate['cost']);

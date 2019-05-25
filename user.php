@@ -20,6 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $errors = [];
 
+    if (!isset($new_data_user['name']) || !isset($new_data_user['message']) || !isset($_FILES['image']['name'])){
+        $error = "Вы удалили поля из формы";
+        render403($categories, $is_auth, $user_name, $error);
+    }
+	
     foreach ($new_data_user as $key => $value) {
         if (empty($value)) {
             $errors[$key] = 'Это поле надо заполнить';

@@ -530,7 +530,7 @@ function get_my_lots($link, $user_id): array
 
 function get_removable_lot($link, $remove_lot_id): array
 {
-    $sql_one_lot = "SELECT lots.user_id, amount FROM lots
+    $sql_one_lot = "SELECT lots.img_url, lots.user_id, amount FROM lots
 	LEFT JOIN rates r ON lots.id = r.lot_id
 	LEFT JOIN users ON users.id = lots.user_id
 	WHERE lots.id = ${remove_lot_id}

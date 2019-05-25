@@ -14,23 +14,28 @@ if (!$is_auth) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	
 	if (!$is_auth) {
-    $error_message = "Вы не авторизированы, доступ запрещен";
-    render403($categories, $is_auth, $user_name, $error_message);
-    }
+	$error_message = "Вы не авторизированы, доступ запрещен";
+	render403($categories, $is_auth, $user_name, $error_message);
+	}
+
+	if (!isset($_POST['remove'])){
+		$error = "Вы удалили поле из формы";
+		render403($categories, $is_auth, $user_name, $error);
+	}
+	
 	$remove_lot_id = $_POST['remove'];
-	
 	$removable_lot = get_removable_lot($link, $remove_lot_id);
-	
+
 	if (empty($removable_lot)) {
-    $error_message = $_SESSION['user']['name'] . "," . " Вы страшный человек - пытаетесь удалить несуществующий лот, или хотите взломать наш сайт :)";
-    render403($categories, $is_auth, $user_name, $error_message);
-    }
+	$error_message = $_SESSION['user']['name'] . "," . " Вы страшный человек - пытаетесь удалить несуществующий лот, или хотите взломать наш сайт :)";
+	render403($categories, $is_auth, $user_name, $error_message);
+	}
 
 	if (!is_null($removable_lot[0]['amount']) || $removable_lot[0]['user_id'] !== $_SESSION['user']['id']){
 		$error_message = "Вы пытаетесь удилить лот, на который уже были ставки или не свой лот";
 		render403($categories, $is_auth, $user_name, $error_message);
 	}
-	
+	unlink($removable_lot[0]['img_url']);
 	$deleted = remove_lot($link, $remove_lot_id);
 	
 	if ($deleted) {

@@ -12,6 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $errors = [];
 
+	if (!isset($new_user['email']) || !isset($new_user['password']) || !isset($new_user['name']) || !isset($new_user['message'])){
+        $error = "Вы удалили поля из формы регистрации";
+        render403($categories, $is_auth, $user_name, $error);
+	}
     foreach ($new_user as $key => $value) {
         if (empty($value)) {
             $errors[$key] = 'Это поле надо заполнить';
