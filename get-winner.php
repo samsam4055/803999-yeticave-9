@@ -35,8 +35,9 @@ if (!empty($lots)) {
         } 
         else 
         {
-            if (time() - strtotime($lot['end_at']) > strtotime(LIFETIME_INACTIVE_LOT))
+            if (ALLOW_DELETION_LOTS && strtotime(LIFETIME_INACTIVE_LOT) - time() < time() - strtotime($lot['end_at']))
             {
+                unlink($lot['img_url']);
                 remove_lot($link, $lot['id']);
             }
         }
