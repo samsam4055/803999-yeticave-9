@@ -1,7 +1,7 @@
 <ul class="pagination-list">
     <?php if ($active_page !== 1): ?>
-        <li class="pagination-item pagination-item-prev"><a
-                    href="<?= $page_link . ($active_page - 1) . '&search=' . $search; ?>">Назад</a></li>
+        <li class="pagination-item pagination-item-prev">
+		<a href="<?= $page_link . ($active_page - 1) . '&search=' . $search; ?>">Назад</a></li>
     <?php endif; ?>
 
     <?php foreach ($paginator as $item): ?>

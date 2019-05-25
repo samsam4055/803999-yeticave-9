@@ -381,7 +381,7 @@ function get_sough_lots($link, $search_words, $ofset): array
 	WHERE MATCH(lots.name, lots.description) AGAINST('$search_words' IN BOOLEAN MODE) AND end_at > NOW()
 	GROUP BY lots.id
 	ORDER BY lots.created_at DESC
-	LIMIT 9 OFFSET ${ofset}";
+	LIMIT 3 OFFSET ${ofset}";
 
     return fetch_data($link, $sql_search_lots);
 }
