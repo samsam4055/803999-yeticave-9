@@ -137,8 +137,8 @@ function get_lot_by_id($link, int $lot_id): array
 	AS category, start_price, img_url, end_at, MAX(IF(amount IS NULL, start_price, amount)) AS price, MAX(IF(amount IS NULL, start_price, amount))+rate_step AS new_price FROM lots
 	LEFT JOIN categories ON categories.id = category_id
 	LEFT JOIN rates r ON lots.id = r.lot_id
-	WHERE lots.id = ${lot_id} GROUP BY lots.id";
-    $result = fetch_data($link, $sql_one_lot);
+	WHERE lots.id = ? GROUP BY lots.id";
+    $result = fetch_data($link, $sql_one_lot, [$lot_id]);
     return count($result) === 1 ? $result[0] : [];
 }
 
@@ -272,10 +272,10 @@ function get_user_rates($link, $user_id_rates): array
 		JOIN lots ON lots.id = rates.lot_id
 		JOIN users ON users.id = lots.user_id
 		JOIN categories ON categories.id = lots.category_id
-		WHERE rates.user_id = '$user_id_rates'
+		WHERE rates.user_id = ?
 		ORDER BY rates.created_at DESC";
 
-    return fetch_data($link, $sql_user_rates);
+    return fetch_data($link, $sql_user_rates, [$user_id_rates]);
 }
 
 function render_error_page($categories, $is_auth, $user_name, $error_message)
@@ -349,10 +349,10 @@ function get_lot_rates($link, $lot_id_rates): array
 		FROM rates
 		JOIN lots ON lots.id = rates.lot_id
 		JOIN users ON users.id = rates.user_id
-		WHERE rates.lot_id = '$lot_id_rates'
+		WHERE rates.lot_id = ?
 		ORDER BY rates.created_at DESC";
 
-    return fetch_data($link, $sql_lot_rates);
+    return fetch_data($link, $sql_lot_rates, [$lot_id_rates]);
 }
 
 function insert_rate($link, $amount_rate, $user_id_rate, $lot_id_rate): int
@@ -378,12 +378,12 @@ function get_sough_lots($link, $search_words, $ofset): array
 	FROM lots
 	LEFT JOIN rates ON rates.lot_id = lots.id
 	LEFT JOIN categories ON lots.category_id = categories.id
-	WHERE MATCH(lots.name, lots.description) AGAINST('$search_words' IN BOOLEAN MODE) AND end_at > NOW()
+	WHERE MATCH(lots.name, lots.description) AGAINST(?) AND end_at > NOW()
 	GROUP BY lots.id
 	ORDER BY lots.created_at DESC
-	LIMIT 3 OFFSET ${ofset}";
+	LIMIT 3 OFFSET ?";
 
-    return fetch_data($link, $sql_search_lots);
+    return fetch_data($link, $sql_search_lots, [$search_words, $ofset]);
 }
 
 function get_total_search_lots($link, $search_words): array
@@ -399,9 +399,9 @@ function get_total_category_lots($link, $category_id): array
 {
     $sql_search_lots = "SELECT count(*) AS total
 	FROM lots
-	WHERE category_id = '$category_id' AND end_at > NOW()";
+	WHERE category_id = ? AND end_at > NOW()";
 
-    return fetch_data($link, $sql_search_lots);
+    return fetch_data($link, $sql_search_lots, [$category_id]);
 }
 
 function get_lots_by_category($link, $category_id, $ofset): array
@@ -419,12 +419,12 @@ function get_lots_by_category($link, $category_id, $ofset): array
 	FROM lots
 	LEFT JOIN rates ON rates.lot_id = lots.id
 	LEFT JOIN categories ON lots.category_id = categories.id
-	WHERE end_at > NOW() AND category_id =  ${category_id}
+	WHERE end_at > NOW() AND category_id =  ?
 	GROUP BY lots.id
 	ORDER BY lots.created_at DESC
-	LIMIT 9 OFFSET ${ofset}";
+	LIMIT 3 OFFSET ?";
 
-    return fetch_data($link, $sql_search_lots);
+    return fetch_data($link, $sql_search_lots, [$category_id, $ofset]);
 }
 
 function get_array_paginator($active_page, $total_pages)
@@ -468,10 +468,10 @@ function get_max_rate($link, $lot_id): array
 {
     $sql_max_rate = "SELECT amount AS max_rate, user_id
     FROM rates
-    WHERE lot_id = $lot_id
+    WHERE lot_id = ?
     ORDER BY amount DESC LIMIT 1";
 
-    return fetch_data($link, $sql_max_rate);
+    return fetch_data($link, $sql_max_rate, [$lot_id]);
 }
 
 function update_data($link, string $sql): bool
@@ -522,10 +522,10 @@ function get_my_lots($link, $user_id): array
 	AS category, start_price, img_url, end_at FROM lots
 	JOIN categories ON categories.id = category_id
 	JOIN users ON users.id = lots.user_id
-	WHERE user_id = $user_id
+	WHERE user_id = ?
 	ORDER BY lots.created_at DESC LIMIT 9";
 
-    return fetch_data($link, $sql_lots);
+    return fetch_data($link, $sql_lots, [$user_id]);
 }
 
 function get_removable_lot($link, $remove_lot_id): array
@@ -533,10 +533,10 @@ function get_removable_lot($link, $remove_lot_id): array
     $sql_one_lot = "SELECT lots.img_url, lots.user_id, amount FROM lots
 	LEFT JOIN rates r ON lots.id = r.lot_id
 	LEFT JOIN users ON users.id = lots.user_id
-	WHERE lots.id = ${remove_lot_id}
+	WHERE lots.id = ?
 	GROUP BY lots.id";
 
-    return fetch_data($link, $sql_one_lot);
+    return fetch_data($link, $sql_one_lot, [$remove_lot_id]);
 }
 
 function remove_lot($link, $remove_lot_id): bool
@@ -548,7 +548,7 @@ function remove_lot($link, $remove_lot_id): bool
 
 function get_category_by_id($link, $cat_id): array
 {
-    $sql_cat = "SELECT id FROM categories WHERE id = ${cat_id}";
+    $sql_cat = "SELECT id FROM categories WHERE id = ?";
 
-    return fetch_data($link, $sql_cat);
+    return fetch_data($link, $sql_cat, [$cat_id]);
 }
