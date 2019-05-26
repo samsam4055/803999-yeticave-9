@@ -26,9 +26,9 @@ $total_search_lots = intval($total_search_lots[0]['total']);
 $pages = intval(ceil($total_search_lots / LOTS_PAGE));
 $ofset = ($num_page - 1) * LOTS_PAGE;
 
-$paginator = get_array_paginator($num_page, $pages);
+$paginator = range(1, $pages);
 
-$found_lots = get_lots_by_category($link, $category_id, $ofset);
+$found_lots = get_lots_by_category($link, $category_id, LOTS_PAGE, $ofset);
 
 $title = "Все лоты в категории " . $found_lots[0]['category'];
 

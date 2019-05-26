@@ -8,7 +8,7 @@ $title = "Поиск";
 
 $errors = [];
 
-$search_words = $_GET['search'] ?? '';
+$search_words = $_GET['id'] ?? '';
 $search_words = trim($search_words);
 
 if (!$search_words) {
@@ -34,10 +34,9 @@ $total_search_lots = intval($total_search_lots[0]['total']);
 $pages = intval(ceil($total_search_lots / LOTS_PAGE));
 $ofset = ($num_page - 1) * LOTS_PAGE;
 
-$paginator = get_array_paginator($num_page, $pages);
+$paginator = range(1, $pages);
 
-$found_lots = get_sough_lots($link, $search_words, $ofset);
-
+$found_lots = get_sough_lots($link, $search_words, LOTS_PAGE, $ofset);
 
 $paginator_content = include_template('paginator.php', [
     'paginator' => $paginator,
