@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    if (filter_var($login_form['email'], FILTER_VALIDATE_EMAIL) === false) {
+    if (filter_var(trim($login_form['email']), FILTER_VALIDATE_EMAIL) === false) {
         $errors['email'] = 'Введите корректный e-mail';
     } else {
         $user_email = htmlspecialchars($login_form['email']);

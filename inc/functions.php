@@ -209,9 +209,9 @@ function is_date_from_future(string $date): bool
     return true;
 }
 
-function insert_data($link, string $sql): int
+function insert_data($link, string $sql, array $data = []): int
 {
-    $stmt = db_get_prepare_stmt($link, $sql);
+    $stmt = db_get_prepare_stmt($link, $sql, $data);
     $result = mysqli_stmt_execute($stmt);
 
     if (!$result) {
@@ -229,17 +229,17 @@ function insert_lot($link, $new_lot_name, $new_lot_message, $file_url, $new_lot_
 {
     $add_lot = "INSERT INTO lots
 	(name, description, img_url, start_price, end_at, rate_step, user_id, category_id) VALUES
-	('$new_lot_name', '$new_lot_message', '$file_url', '$new_lot_price', '$new_lot_end_at', '$new_lot_step', '$new_lot_user_id', '$new_lot_category_id')";
+	(?, ?, ?, ?, ?, ?, ?, ?)";
 
-    $lot_id = insert_data($link, $add_lot);
+    $lot_id = insert_data($link, $add_lot, [$new_lot_name, $new_lot_message, $file_url, $new_lot_price, $new_lot_end_at, $new_lot_step, $new_lot_user_id, $new_lot_category_id]);
 
     return $lot_id;
 }
 
 function is_registered_email($link, string $email): bool
 {
-    $sql_email = "SELECT id FROM users WHERE email = '$email'";
-    $verifiable_email = fetch_data($link, $sql_email);
+    $sql_email = "SELECT id FROM users WHERE email = ?";
+    $verifiable_email = fetch_data($link, $sql_email, [$email]);
 
     if ($verifiable_email) {
         return true;
@@ -250,17 +250,17 @@ function is_registered_email($link, string $email): bool
 function insert_user($link, $new_user_name, $new_user_message, $new_user_password, $new_user_email): int
 {
     $add_user = "INSERT INTO users (email, name, password, contact)
-	VALUES ('$new_user_email', '$new_user_name', '$new_user_password', '$new_user_message')";
+	VALUES (?, ?, ?, ?)";
 
-    $user_id = insert_data($link, $add_user);
+    $user_id = insert_data($link, $add_user, [$new_user_email, $new_user_name, $new_user_password, $new_user_message]);
 
     return $user_id;
 }
 
 function get_user_by_email($link, $user_email): array
 {
-    $sql_user_by_email = "SELECT * FROM users WHERE email = '$user_email'";
-    $result = fetch_data($link, $sql_user_by_email);
+    $sql_user_by_email = "SELECT * FROM users WHERE email = ?";
+    $result = fetch_data($link, $sql_user_by_email, [$user_email]);
     return count($result) === 1 ? $result[0] : [];
 }
 
@@ -358,9 +358,9 @@ function get_lot_rates($link, $lot_id_rates): array
 function insert_rate($link, $amount_rate, $user_id_rate, $lot_id_rate): int
 {
     $add_rate = "INSERT INTO rates (amount, user_id, lot_id)
-    VALUES ('$amount_rate', '$user_id_rate', '$lot_id_rate')";
+    VALUES (?, ?, ?)";
 
-    return insert_data($link, $add_rate);
+    return insert_data($link, $add_rate, [$amount_rate, $user_id_rate, $lot_id_rate]);
 }
 
 function get_sough_lots($link, $search_words, $lots_page, $ofset): array
@@ -444,9 +444,9 @@ function get_max_rate($link, $lot_id): array
     return fetch_data($link, $sql_max_rate, [$lot_id]);
 }
 
-function update_data($link, string $sql): bool
+function update_data($link, string $sql, array $data = []): bool
 {
-    $stmt = db_get_prepare_stmt($link, $sql);
+    $stmt = db_get_prepare_stmt($link, $sql, $data);
     $result = mysqli_stmt_execute($stmt);
 
     return $result;
@@ -455,35 +455,35 @@ function update_data($link, string $sql): bool
 function update_lots($link, $user_id, $lot_id): bool
 {
     $sql = "UPDATE lots
-     SET winner_id = $user_id
-     WHERE id = $lot_id";
+     SET winner_id = ?
+     WHERE id = ?";
 
-    return update_data($link, $sql);
+    return update_data($link, $sql, [$user_id, $lot_id]);
 }
 
 function get_user($link, $user_id): array
 {
-    $sql_user = "SELECT email, contact, password, avatar_url, name FROM users WHERE id = $user_id";
+    $sql_user = "SELECT email, contact, password, avatar_url, name FROM users WHERE id = ?";
 
-    return fetch_data($link, $sql_user);
+    return fetch_data($link, $sql_user, [$user_id]);
 }
 
 function update_user($link, $user_id, $new_data_user_name, $new_data_user_message): bool
 {
     $sql = "UPDATE users
-	SET name = '$new_data_user_name', contact = '$new_data_user_message'
-	WHERE id = $user_id";
+	SET name = ?, contact = ?
+	WHERE id = ?";
 
-    return update_data($link, $sql);
+    return update_data($link, $sql, [$new_data_user_name, $new_data_user_message, $user_id]);
 }
 
 function update_user_with_avatar($link, $user_id, $new_data_user_name, $new_data_user_message, $file_url): bool
 {
     $sql = "UPDATE users
-	SET name = '$new_data_user_name', contact = '$new_data_user_message', avatar_url = '$file_url'
-	WHERE id = $user_id";
+	SET name = ?, contact = ?, avatar_url = ?
+	WHERE id = ?";
 
-    return update_data($link, $sql);
+    return update_data($link, $sql, [$new_data_user_name, $new_data_user_message, $file_url, $user_id]);
 }
 
 function get_my_lots($link, $user_id): array
@@ -511,9 +511,9 @@ function get_removable_lot($link, $remove_lot_id): array
 
 function remove_lot($link, $remove_lot_id): bool
 {
-    $sql = "DELETE FROM `lots` WHERE `lots`.`id` = ${remove_lot_id}";
+    $sql = "DELETE FROM `lots` WHERE `lots`.`id` = ?";
 
-    return update_data($link, $sql);
+    return update_data($link, $sql, [$remove_lot_id]);
 }
 
 function get_category_by_id($link, $cat_id): array
