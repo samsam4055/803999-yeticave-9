@@ -1,3 +1,4 @@
+<?php if ($total_pages !== 1) : ?>
 <ul class="pagination-list">
 	<li class="pagination-item pagination-item-prev <?= $active_page === 1 ? 'pagination-item-active' : ''; ?>">
 		<a <?= $active_page > 1 ? 'href="' . $page_link . ($active_page - 1) . '&id=' . $search . '"': ""; ?>>Назад</a>
@@ -11,3 +12,4 @@
 		<a <?= $active_page !== $total_pages ? 'href="' . $page_link . ($active_page + 1) . '&id=' . $search . '"': ""; ?>>Вперед</a>
 	</li>
 </ul>
+ <?php endif; ?>

@@ -32,6 +32,12 @@ $page_link = 'search.php?page=';
 
 $total_search_lots = intval($total_search_lots[0]['total']);
 $pages = intval(ceil($total_search_lots / LOTS_PAGE));
+
+if ($num_page <= 0 || $num_page > $pages){
+    $error_message = "Страница не найдена.";
+    render404($categories, $is_auth, $user_name, $error_message);
+}
+
 $ofset = ($num_page - 1) * LOTS_PAGE;
 
 $paginator = range(1, $pages);
